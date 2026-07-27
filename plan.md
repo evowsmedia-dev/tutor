@@ -1,44 +1,39 @@
-# Ke Hoach Xay Dung Du An Tutor
+# Kế Hoạch Xây Dựng Rico Study
 
 ## Tom tat
 
-Tutor la WebApp quan ly lop hoc cho giao vien day them va trung tam nho. Ung dung chay tren subdomain rieng, frontend deploy dang static site len Hostinger, backend dung Google Apps Script, du lieu luu trong Google Sheet cua tung khach hang.
+Rico Study là WebApp quản lý lớp học cho giáo viên dạy thêm và trung tâm nhỏ. Ứng dụng chạy dạng web app, frontend deploy static, backend dùng Google Apps Script, dữ liệu lưu trong Google Sheet của từng khách hàng.
 
-MVP tap trung vao quan ly hoc vien, lop hoc, lich hoc, diem danh, hoc phi, cong no, dashboard, bao cao co ban, email va phan quyen admin/giao vien. Zalo OA, thanh toan online, hoa don dien tu va mobile app native se trien khai sau MVP.
+MVP tập trung vào giao diện glass/liquid theo file `quanly-lophoc(1).html`, quản lý học viên, lớp học, điểm danh một chạm, học phí, công nợ, dashboard, báo cáo, thông báo phụ huynh qua Zalo/email và phân quyền admin/giáo viên.
 
 ## Kien truc
 
-- Frontend: Vue 3 + Vite, mobile-first, co che demo local truoc khi noi API that.
-- Backend: Google Apps Script Web App nhan request HTTP va doc/ghi Google Sheet.
-- Database: Google Sheet template gom cac tab chuan hoa.
-- Auth MVP: tai khoan quan tri/giao vien luu trong tab `GiaoVien`.
-- Deploy: build thu muc `dist/`, upload len subdomain nhu `quanly.tenmien.com`.
+- Frontend: Vue 3 + Vite, mobile-first, demo local trước khi nối API thật.
+- Backend: Google Apps Script Web App nhận request HTTP và đọc/ghi Google Sheet.
+- Database: Google Sheet template gồm các tab chuẩn hóa.
+- Auth MVP: tài khoản quản trị/giáo viên lưu trong tab `GiaoVien`.
+- Deploy: Vercel production hoặc upload thư mục `dist/` lên subdomain.
 
 ## Cac buoc trien khai
 
-1. Khoi tao project Vue 3 + Vite va theme UI mobile-first.
-2. Tao schema Google Sheet template va tai lieu cot du lieu bat buoc.
-3. Tao Google Apps Script backend voi response chuan `{ success, data, error }`.
-4. Dung frontend bang du lieu demo va API client co the chuyen sang Apps Script URL.
-5. Xay cac man hinh MVP: dang nhap, dashboard, lop hoc, diem danh, hoc vien, thu hoc phi, cong no, bao cao, cai dat.
-6. Them flow email thong bao qua Apps Script.
-7. Hoan thien phan quyen admin/giao vien.
-8. Tao du lieu demo va checklist cai dat cho moi khach hang.
-9. Build production va deploy len Hostinger.
-10. Kiem thu tren mobile, tablet va desktop.
+1. Port UI Rico Study từ file mẫu vào Vue: login, sidebar, bottom nav, card, modal, toast.
+2. Hoàn thiện workflow ít thao tác: điểm danh auto-save, thu tiền tự điền công nợ, tự tạo thông báo.
+3. Cập nhật schema Google Sheet cho thông tin Zalo/phụ huynh, queue thông báo và báo cáo phụ huynh.
+4. Mở rộng Apps Script API: gửi thông báo, Zalo OA, ZNS, queue, report phụ huynh.
+5. Kết nối frontend với Apps Script khi có `VITE_APPS_SCRIPT_URL`.
+6. Kiểm thử local, build production và deploy Vercel.
 
 ## Tieu chi nghiem thu MVP
 
-- Dang nhap demo va xem dashboard duoc.
-- Tao/loc/xem hoc vien va lop hoc duoc.
-- Diem danh mot cham theo trang thai: co mat, vang, di muon, hoc bu, nghi co phep.
-- Ghi nhan thu hoc phi va cap nhat cong no.
-- Bao cao doanh thu, cong no va ty le di hoc hien thi dung theo du lieu.
-- Giao dien khong vo tren man hinh dien thoai.
-- Co file Apps Script de copy len Google Apps Script va cau hinh Google Sheet ID.
+- Đăng nhập demo và xem dashboard Rico Study được.
+- Xem học viên, lớp học, điểm danh, học phí, báo cáo, thông báo, cài đặt.
+- Điểm danh một chạm tự lưu và tạo hàng đợi nhắn phụ huynh khi vắng/nghỉ phép.
+- Thu học phí tự cập nhật công nợ và tạo xác nhận phụ huynh.
+- Zalo/email có preview, lịch sử gửi và fallback thủ công khi chưa đủ cấu hình.
+- Giao diện không vỡ trên mobile, tablet, desktop.
 
 ## Ghi chu
 
-- Ban dau app chay o che do demo local de co the phat trien UI nhanh.
-- Khi co Google Apps Script URL, dien `VITE_APPS_SCRIPT_URL` vao `.env` de frontend goi backend.
-- Ten cot Google Sheet nen giu dung nhu tai lieu schema de Apps Script doc/ghi on dinh.
+- Ban đầu app chạy ở chế độ demo local để phát triển UI nhanh.
+- Khi có Google Apps Script URL, điền `VITE_APPS_SCRIPT_URL` vào `.env` để frontend gọi backend.
+- Zalo OA/ZNS cần token và template thật trước khi bật gửi production.

@@ -4,6 +4,16 @@ File này dùng để ghi lại lịch sử thay đổi trong quá trình xây d
 
 ## 2026-07-27
 
+### Rico Study Implementation
+
+- Đổi thương hiệu app sang `Rico Study`.
+- Port giao diện từ `quanly-lophoc(1).html` sang Vue: liquid/glass background, login card, sidebar desktop, bottom nav mobile, cards, modal và toast.
+- Mở rộng frontend đủ màn hình: Tổng quan, Học viên, Lớp học, Điểm danh, Học phí & Công nợ, Báo cáo, Thông báo, Cài đặt.
+- Thêm workflow ít thao tác: điểm danh một chạm tự lưu, vắng/nghỉ phép tự tạo hàng đợi nhắn phụ huynh, thu học phí tự điền công nợ và tạo xác nhận.
+- Thêm mô phỏng Zalo OA/ZNS/email/fallback thủ công, preview tin nhắn, lịch sử gửi và báo cáo phụ huynh.
+- Cập nhật Apps Script API mẫu cho queue thông báo, gửi Zalo OA, ZNS, email, báo cáo phụ huynh và lịch sử thông báo.
+- Cập nhật Google Sheet schema với thông tin phụ huynh/Zalo, trạng thái gửi, báo cáo phụ huynh và cấu hình template.
+
 ### Added
 
 - Tạo file `changelog.md` để theo dõi log công việc.

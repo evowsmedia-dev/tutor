@@ -1,24 +1,26 @@
-# Tutor Class Manager
+# Rico Study
 
-WebApp quan ly lop hoc cho giao vien day them va trung tam nho. Frontend dung Vue 3 + Vite, backend du kien dung Google Apps Script, du lieu luu tren Google Sheet rieng cua tung khach hang.
+WebApp quản lý lớp học cho giáo viên dạy thêm và trung tâm nhỏ. Frontend dùng Vue 3 + Vite, backend dự kiến dùng Google Apps Script, dữ liệu lưu trên Google Sheet riêng của từng khách hàng.
 
-## Chay local
+Rico Study ưu tiên thao tác ít nhất có thể: điểm danh một chạm, tự lưu trạng thái, tự đưa học viên vắng/nghỉ phép vào hàng đợi nhắn phụ huynh, tự điền số tiền còn nợ khi thu học phí và tạo tin Zalo/email từ mẫu có sẵn.
+
+## Chạy local
 
 ```bash
 npm install
 npm run dev
 ```
 
-Mo app tai:
+Mở app tại:
 
 ```text
 http://localhost:5173/
 ```
 
-Tai khoan demo:
+Tài khoản demo:
 
 ```text
-admin@tutor.local / 123456
+admin@ricostudy.vn / 123456
 ```
 
 ## Build production
@@ -27,30 +29,39 @@ admin@tutor.local / 123456
 npm run build
 ```
 
-Thu muc `dist/` la ban static co the upload len subdomain Hostinger.
+Thư mục `dist/` là bản static có thể upload lên Hostinger hoặc deploy lên Vercel.
 
-## Cau hinh Google Apps Script
+## Cấu hình Google Apps Script
 
-1. Tao Google Sheet theo schema trong `docs/google-sheet-schema.md`.
-2. Tao Apps Script project va copy noi dung `apps-script/Code.gs`.
-3. Them script property:
+1. Tạo Google Sheet theo schema trong `docs/google-sheet-schema.md`.
+2. Tạo Apps Script project và copy nội dung `apps-script/Code.gs`.
+3. Thêm script property:
 
 ```text
 SPREADSHEET_ID=<Google Sheet ID>
 ```
 
-4. Deploy Apps Script dang Web App.
-5. Tao file `.env` tu `.env.example` va dien:
+4. Deploy Apps Script dạng Web App.
+5. Tạo file `.env` từ `.env.example` và điền:
 
 ```text
 VITE_APPS_SCRIPT_URL=<Apps Script Web App URL>
 ```
 
-6. Build lai frontend va deploy thu muc `dist/`.
+6. Build lại frontend và deploy thư mục `dist/`.
 
-## Trang thai hien tai
+## Zalo và phụ huynh
 
-- Da co MVP frontend chay demo local.
-- Da co schema Google Sheet va backend Apps Script mau.
-- Chua ket noi API that vao frontend.
-- Chua tich hop Zalo OA, thanh toan online, hoa don dien tu.
+Rico Study hỗ trợ 3 mức gửi:
+
+- Zalo OA khi phụ huynh đã quan tâm OA và có `zaloUserId`.
+- ZNS khi có token, template đã duyệt và số điện thoại đủ điều kiện.
+- Fallback thủ công: tạo sẵn nội dung để giáo viên sao chép/mở Zalo gửi.
+
+## Trạng thái hiện tại
+
+- Đã có MVP frontend Rico Study chạy demo local.
+- Đã có schema Google Sheet và backend Apps Script mẫu.
+- Đã có UI hàng đợi thông báo, mock Zalo/OA/ZNS fallback và báo cáo phụ huynh.
+- Chưa kết nối API thật vào frontend.
+- Chưa cấu hình token Zalo OA/ZNS production.

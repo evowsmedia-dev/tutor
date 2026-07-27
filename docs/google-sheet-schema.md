@@ -1,4 +1,4 @@
-# Google Sheet Schema
+# Google Sheet Schema - Rico Study
 
 Google Sheet cua moi khach hang can co cac tab sau. Cot `id` nen la chuoi duy nhat, vi du `stu_001`, `cls_001`.
 
@@ -9,9 +9,14 @@ Google Sheet cua moi khach hang can co cac tab sau. Cot `id` nen la chuoi duy nh
 | id | Ma hoc vien |
 | name | Ho ten hoc vien |
 | phone | So dien thoai hoc vien |
-| parentName | Ten phu huynh |
-| parentPhone | So dien thoai phu huynh |
-| email | Email phu huynh/hoc vien |
+| parentName | Tên phụ huynh |
+| parentPhone | Số điện thoại phụ huynh |
+| parentEmail | Email phụ huynh |
+| zaloUserId | Zalo OA follower/user ID nếu phụ huynh đã quan tâm OA |
+| zaloFollowStatus | followed, not_followed, unknown |
+| zaloConsentStatus | granted, pending, denied |
+| lastNotifiedAt | Lần gần nhất gửi thông báo phụ huynh |
+| email | Email phụ huynh/học viên, giữ để tương thích dữ liệu cũ |
 | classIds | Danh sach ma lop, phan tach bang dau phay |
 | status | active, paused, archived |
 | note | Ghi chu |
@@ -50,6 +55,8 @@ Google Sheet cua moi khach hang can co cac tab sau. Cot `id` nen la chuoi duy nh
 | studentId | Ma hoc vien |
 | status | present, absent, late, makeup, excused |
 | checkedAt | Thoi diem ghi nhan |
+| notifiedAt | Thời điểm đã nhắn phụ huynh nếu vắng/nghỉ phép |
+| notificationStatus | queued, sent, manual, failed |
 | note | Ghi chu |
 
 ## ThuHocPhi
@@ -62,6 +69,8 @@ Google Sheet cua moi khach hang can co cac tab sau. Cot `id` nen la chuoi duy nh
 | amount | So tien da thu |
 | method | cash, bank, other |
 | paidAt | Ngay thu |
+| notifyParent | TRUE/FALSE, tự gửi xác nhận cho phụ huynh |
+| notificationId | Mã thông báo xác nhận đã thu |
 | note | Ghi chu |
 
 ## CongNo
@@ -95,10 +104,26 @@ Google Sheet cua moi khach hang can co cac tab sau. Cot `id` nen la chuoi duy nh
 | id | Ma thong bao |
 | channel | email, zalo |
 | recipient | Nguoi nhan |
+| studentId | Mã học viên liên quan |
+| classId | Mã lớp liên quan |
 | templateKey | Mau tin |
+| payload | Nội dung/payload gửi qua API |
 | content | Noi dung |
 | sentAt | Thoi diem gui |
-| status | sent, failed |
+| status | queued, sent, manual, failed |
+| error | Lỗi nếu gửi thất bại hoặc cần gửi thủ công |
+
+## BaoCaoPhuHuynh
+
+| Cot | Mo ta |
+|---|---|
+| id | Mã báo cáo |
+| studentId | Mã học viên |
+| classId | Mã lớp |
+| token | Token link phụ huynh |
+| summary | Nội dung tóm tắt học tập |
+| expiresAt | Ngày hết hạn link |
+| createdAt | Thời điểm tạo |
 
 ## CauHinh
 
@@ -107,3 +132,17 @@ Google Sheet cua moi khach hang can co cac tab sau. Cot `id` nen la chuoi duy nh
 | key | Khoa cau hinh |
 | value | Gia tri |
 | note | Ghi chu |
+
+Các khóa cấu hình khuyến nghị:
+
+```text
+ZALO_OA_ACCESS_TOKEN
+ZNS_ACCESS_TOKEN
+ZNS_TEMPLATE_ID
+TPL_remind_class
+TPL_reschedule
+TPL_remind_fee
+TPL_confirm_paid
+TPL_learning_report
+TPL_absence_followup
+```
