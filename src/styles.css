@@ -443,7 +443,8 @@ kbd {
 }
 
 .ledger-grid {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 12px;
 }
 
 .step-grid {
@@ -799,17 +800,27 @@ kbd {
   font-size: 12px;
 }
 
-.att-row {
+.att-row,
+.att-card {
   flex-wrap: wrap;
   border: 1px solid var(--line);
-  border-radius: 14px;
-  padding: 18px;
+  border-radius: 13px;
+  padding: 14px;
   background: #fff;
+}
+
+.att-card {
+  display: grid;
+  gap: 10px;
+  align-content: start;
+  min-height: 172px;
+  box-shadow: var(--shadow);
 }
 
 .att-name {
   display: grid;
-  min-width: 180px;
+  min-width: 156px;
+  gap: 2px;
 }
 
 .att-name span {
@@ -821,18 +832,18 @@ kbd {
   display: flex;
   flex: 1;
   justify-content: flex-end;
-  gap: 9px;
+  gap: 6px;
   flex-wrap: wrap;
 }
 
 .att-btn {
-  min-height: 34px;
+  min-height: 30px;
   border: 1px solid var(--line);
   border-radius: 999px;
-  padding: 0 10px;
+  padding: 0 9px;
   background: #fff;
   color: var(--muted);
-  font-size: 12px;
+  font-size: 11.5px;
   font-weight: 800;
 }
 
@@ -865,7 +876,25 @@ kbd {
 
 .ledger-card {
   display: grid;
+  gap: 9px;
+  min-height: 208px;
+  padding: 16px;
+}
+
+.ledger-list {
+  display: grid;
   gap: 10px;
+}
+
+.ledger-list .ledger-card {
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  min-height: unset;
+}
+
+.ledger-list .ledger-card p,
+.ledger-list .ledger-card .ledger-stats {
+  display: none;
 }
 
 .ledger-stats {
@@ -929,26 +958,27 @@ kbd {
 
 .card-grid {
   display: grid;
-  gap: 18px;
+  gap: 12px;
 }
 
 .schedule-grid,
 .student-grid,
+.attendance-grid,
 .invoice-grid,
 .share-grid {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
 }
 
 .student-card,
 .invoice-card,
 .share-card {
   display: grid;
-  gap: 14px;
+  gap: 10px;
   align-content: start;
-  min-height: 190px;
+  min-height: 158px;
   border: 1px solid var(--line);
-  border-radius: 16px;
-  padding: 20px;
+  border-radius: 13px;
+  padding: 14px;
   background: #fff;
   box-shadow: var(--shadow);
 }
@@ -965,12 +995,22 @@ kbd {
 
 .schedule-grid .schedule-card {
   align-items: flex-start;
-  min-height: 180px;
+  min-height: 142px;
   border: 1px solid var(--line);
-  border-radius: 16px;
-  padding: 20px;
+  border-radius: 13px;
+  padding: 14px;
   background: #fff;
   box-shadow: var(--shadow);
+}
+
+.schedule-card h3,
+.student-card b,
+.invoice-card b,
+.share-card b,
+.ledger-card h3 {
+  margin-bottom: 0;
+  font-size: 15.5px;
+  line-height: 1.18;
 }
 
 .schedule-grid .schedule-card button,
@@ -983,10 +1023,22 @@ kbd {
 .auto-fee-hero {
   display: grid;
   grid-template-columns: minmax(0, 1.1fr) minmax(360px, 0.9fr);
-  gap: 30px;
+  gap: 18px;
   align-items: center;
   border-radius: 14px;
-  padding: 42px;
+  padding: 24px;
+}
+
+.auto-fee-hero h1 {
+  max-width: 720px;
+  font-size: 34px;
+}
+
+.auto-fee-hero span {
+  display: block;
+  max-width: 760px;
+  font-size: 13.5px;
+  line-height: 1.55;
 }
 
 .today-fees {
@@ -994,11 +1046,11 @@ kbd {
   border-radius: 14px;
   background: #fff;
   box-shadow: var(--shadow);
-  padding: 16px;
+  padding: 12px;
 }
 
 .today-fees article {
-  padding: 12px 0;
+  padding: 10px 0;
   border-bottom: 1px solid #f1e8ed;
 }
 
@@ -1033,10 +1085,11 @@ kbd {
 }
 
 .step-grid article {
-  min-height: 110px;
+  min-height: 96px;
   align-items: flex-start;
   flex-direction: column;
   border-radius: 12px;
+  padding: 16px;
 }
 
 .tabbar {

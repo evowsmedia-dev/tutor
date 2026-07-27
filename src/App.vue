@@ -102,7 +102,9 @@ const state = reactive({
   studentSearch: '',
   layouts: {
     schedule: 'list',
+    attendance: 'list',
     students: 'list',
+    ledger: 'grid',
     invoices: 'list',
     notifications: 'list',
   },
@@ -1096,12 +1098,16 @@ function toast(message) {
           <span>Ảnh chỉ tự nhận diện học sinh đã có consent; hồ sơ thiếu consent được đưa vào hàng chờ xác nhận.</span>
         </div>
         <div class="toolbar sticky-toolbar">
-          <select v-model="state.selectedClassId" class="select-chip">
+          <select v-model="state.selectedClassId" name="attendanceClass" class="select-chip">
             <option v-for="classItem in state.classes" :key="classItem.id" :value="classItem.id">{{ classItem.name }}</option>
           </select>
-          <input v-model="state.attendanceDate" type="date" class="select-chip" />
+          <input v-model="state.attendanceDate" name="attendanceDate" type="date" class="select-chip" />
+          <div class="view-toggle" aria-label="Đổi kiểu hiển thị điểm danh">
+            <button type="button" :class="{ active: state.layouts.attendance === 'list' }" @click="state.layouts.attendance = 'list'">List</button>
+            <button type="button" :class="{ active: state.layouts.attendance === 'grid' }" @click="state.layouts.attendance = 'grid'">Grid</button>
+          </div>
           <span class="spacer"></span>
-          <input ref="photoInput" class="visually-hidden" type="file" accept="image/*" capture="environment" @change="handlePhotoUpload" />
+          <input ref="photoInput" class="visually-hidden" name="attendancePhoto" type="file" accept="image/*" capture="environment" @change="handlePhotoUpload" />
           <button type="button" class="btn btn-soft btn-sm" @click="triggerPhotoInput"><Camera :size="16" /> Chụp / tải ảnh</button>
           <button type="button" class="btn btn-primary btn-sm" @click="state.shareArtifacts[0] ? shareArtifact(state.shareArtifacts[0]) : toast('Chưa có thẻ chia sẻ nào.')"><Share2 :size="16" /> Share gần nhất</button>
           <span class="hint">Đã điểm danh {{ Object.keys(activeAttendance).length }}/{{ classStudents.length }}</span>
@@ -1120,8 +1126,8 @@ function toast(message) {
             </div>
           </article>
         </div>
-        <div class="attendance-list">
-          <article v-for="student in classStudents" :key="student.id" class="att-row">
+        <div :class="state.layouts.attendance === 'grid' ? 'card-grid attendance-grid' : 'attendance-list'">
+          <article v-for="student in classStudents" :key="student.id" :class="state.layouts.attendance === 'grid' ? 'att-card' : 'att-row'">
             <div class="avatar">{{ initials(student.name) }}</div>
             <div class="att-name">
               <b>{{ student.name }}</b>
@@ -1142,7 +1148,13 @@ function toast(message) {
           <h1>Trang theo dõi học tập cho phụ huynh</h1>
           <span>Mỗi học sinh có chuyên cần, lịch học, nhật ký buổi, học phí và link chia sẻ riêng.</span>
         </div>
-        <div class="ledger-grid">
+        <div class="toolbar">
+          <div class="view-toggle" aria-label="Đổi kiểu hiển thị sổ liên lạc">
+            <button type="button" :class="{ active: state.layouts.ledger === 'list' }" @click="state.layouts.ledger = 'list'">List</button>
+            <button type="button" :class="{ active: state.layouts.ledger === 'grid' }" @click="state.layouts.ledger = 'grid'">Grid</button>
+          </div>
+        </div>
+        <div :class="state.layouts.ledger === 'grid' ? 'ledger-grid' : 'ledger-list'">
           <article v-for="student in state.students.slice(0, 6)" :key="student.id" class="ledger-card">
             <div class="avatar large">{{ initials(student.name) }}</div>
             <h3>{{ student.name }}</h3>
