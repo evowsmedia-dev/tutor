@@ -32,6 +32,8 @@ File này dùng để ghi lại lịch sử thay đổi trong quá trình xây d
 - Redeploy production từ HEAD mới nhất; deployment URL là `https://tutor-iqjtap03a-rubybao.vercel.app`, alias vẫn là `https://tutor-six-delta.vercel.app`.
 - Cập nhật toàn bộ ngôn ngữ hiển thị trên frontend sang tiếng Việt có dấu.
 - Thêm nhãn tiếng Việt cho vai trò, trạng thái lớp/buổi học/học viên/công nợ và phương thức thanh toán.
+- Deploy production bản tiếng Việt có dấu; deployment URL là `https://tutor-hw7bx02mt-rubybao.vercel.app`, alias vẫn là `https://tutor-six-delta.vercel.app`.
+- Kiểm tra production bundle có các cụm tiếng Việt có dấu như `Tổng quan`, `Đăng nhập`, `Quản lý lớp học`, `Công nợ`, `Tiền mặt`.
 
 ### Notes
 
