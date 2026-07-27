@@ -4,21 +4,21 @@ import { computed, reactive } from 'vue';
 const appScriptUrl = import.meta.env.VITE_APPS_SCRIPT_URL || '';
 
 const navItems = [
-  { id: 'dashboard', label: 'Tong quan', icon: 'Home' },
-  { id: 'classes', label: 'Lop hoc', icon: 'BookOpen' },
-  { id: 'attendance', label: 'Diem danh', icon: 'ClipboardCheck' },
-  { id: 'students', label: 'Hoc vien', icon: 'Users' },
-  { id: 'payments', label: 'Hoc phi', icon: 'WalletCards' },
-  { id: 'reports', label: 'Bao cao', icon: 'CircleDollarSign' },
-  { id: 'settings', label: 'Cai dat', icon: 'Settings' },
+  { id: 'dashboard', label: 'Tổng quan', icon: 'Home' },
+  { id: 'classes', label: 'Lớp học', icon: 'BookOpen' },
+  { id: 'attendance', label: 'Điểm danh', icon: 'ClipboardCheck' },
+  { id: 'students', label: 'Học viên', icon: 'Users' },
+  { id: 'payments', label: 'Học phí', icon: 'WalletCards' },
+  { id: 'reports', label: 'Báo cáo', icon: 'CircleDollarSign' },
+  { id: 'settings', label: 'Cài đặt', icon: 'Settings' },
 ];
 
 const attendanceStatuses = [
-  { id: 'present', label: 'Co mat' },
-  { id: 'absent', label: 'Vang' },
-  { id: 'late', label: 'Di muon' },
-  { id: 'makeup', label: 'Hoc bu' },
-  { id: 'excused', label: 'Co phep' },
+  { id: 'present', label: 'Có mặt' },
+  { id: 'absent', label: 'Vắng' },
+  { id: 'late', label: 'Đi muộn' },
+  { id: 'makeup', label: 'Học bù' },
+  { id: 'excused', label: 'Có phép' },
 ];
 
 const state = reactive({
@@ -31,27 +31,27 @@ const state = reactive({
   paymentMethod: 'cash',
   toast: '',
   user: {
-    name: 'Co Mai Anh',
+    name: 'Cô Mai Anh',
     role: 'admin',
     email: 'admin@tutor.local',
   },
   students: [
     {
       id: 'stu_001',
-      name: 'Nguyen Minh Quan',
+      name: 'Nguyễn Minh Quân',
       phone: '0901000001',
-      parentName: 'Chi Linh',
+      parentName: 'Chị Linh',
       parentPhone: '0912000001',
       email: 'linh@example.com',
       classIds: ['cls_001'],
       status: 'active',
-      note: 'Can nhac nop bai tap som.',
+      note: 'Cần nhắc nộp bài tập sớm.',
     },
     {
       id: 'stu_002',
-      name: 'Tran Bao Ngoc',
+      name: 'Trần Bảo Ngọc',
       phone: '0901000002',
-      parentName: 'Anh Hai',
+      parentName: 'Anh Hải',
       parentPhone: '0912000002',
       email: 'hai@example.com',
       classIds: ['cls_001', 'cls_002'],
@@ -60,20 +60,20 @@ const state = reactive({
     },
     {
       id: 'stu_003',
-      name: 'Le Gia Huy',
+      name: 'Lê Gia Huy',
       phone: '0901000003',
-      parentName: 'Chi Trang',
+      parentName: 'Chị Trang',
       parentPhone: '0912000003',
       email: 'trang@example.com',
       classIds: ['cls_002'],
       status: 'active',
-      note: 'Hoc combo 12 buoi.',
+      note: 'Học combo 12 buổi.',
     },
     {
       id: 'stu_004',
-      name: 'Pham Tue Nhi',
+      name: 'Phạm Tuệ Nhi',
       phone: '0901000004',
-      parentName: 'Anh Son',
+      parentName: 'Anh Sơn',
       parentPhone: '0912000004',
       email: 'son@example.com',
       classIds: ['cls_003'],
@@ -84,30 +84,30 @@ const state = reactive({
   classes: [
     {
       id: 'cls_001',
-      name: 'Toan 8 nang cao',
+      name: 'Toán 8 nâng cao',
       teacherId: 'tea_001',
-      teacherName: 'Co Mai Anh',
-      scheduleText: 'Thu 2, Thu 5 - 18:00',
+      teacherName: 'Cô Mai Anh',
+      scheduleText: 'Thứ 2, Thứ 5 - 18:00',
       feeType: 'monthly',
       feeAmount: 1200000,
       status: 'active',
     },
     {
       id: 'cls_002',
-      name: 'Tieng Anh 7',
+      name: 'Tiếng Anh 7',
       teacherId: 'tea_002',
-      teacherName: 'Thay Hoang',
-      scheduleText: 'Thu 3, Thu 6 - 19:30',
+      teacherName: 'Thầy Hoàng',
+      scheduleText: 'Thứ 3, Thứ 6 - 19:30',
       feeType: 'combo',
       feeAmount: 1800000,
       status: 'active',
     },
     {
       id: 'cls_003',
-      name: 'Ly 9 on thi',
+      name: 'Lý 9 ôn thi',
       teacherId: 'tea_001',
-      teacherName: 'Co Mai Anh',
-      scheduleText: 'Chu nhat - 08:00',
+      teacherName: 'Cô Mai Anh',
+      scheduleText: 'Chủ nhật - 08:00',
       feeType: 'per_session',
       feeAmount: 180000,
       status: 'active',
@@ -182,11 +182,41 @@ function formatCurrency(value) {
 }
 
 function className(classId) {
-  return state.classes.find(item => item.id === classId)?.name || 'Chua gan lop';
+  return state.classes.find(item => item.id === classId)?.name || 'Chưa gán lớp';
 }
 
 function studentName(studentId) {
-  return state.students.find(item => item.id === studentId)?.name || 'Hoc vien';
+  return state.students.find(item => item.id === studentId)?.name || 'Học viên';
+}
+
+function roleLabel(role) {
+  return {
+    admin: 'Quản trị viên',
+    teacher: 'Giáo viên',
+  }[role] || role;
+}
+
+function statusLabel(status) {
+  return {
+    active: 'Đang học',
+    paused: 'Tạm nghỉ',
+    archived: 'Đã lưu trữ',
+    scheduled: 'Đã lên lịch',
+    changed: 'Đã đổi lịch',
+    cancelled: 'Đã hủy',
+    completed: 'Đã hoàn thành',
+    open: 'Chưa thu',
+    partial: 'Thu một phần',
+    paid: 'Đã thu đủ',
+  }[status] || status;
+}
+
+function methodLabel(method) {
+  return {
+    cash: 'Tiền mặt',
+    bank: 'Chuyển khoản',
+    other: 'Khác',
+  }[method] || method;
 }
 
 function attendanceFor(studentId) {
@@ -208,12 +238,12 @@ function setAttendance(studentId, status) {
       checkedAt: new Date().toISOString(),
     });
   }
-  notify('Da cap nhat diem danh.');
+  notify('Đã cập nhật điểm danh.');
 }
 
 function addStudent() {
   if (!newStudent.name.trim()) {
-    notify('Vui long nhap ten hoc vien.');
+    notify('Vui lòng nhập tên học viên.');
     return;
   }
   state.students.unshift({
@@ -230,13 +260,13 @@ function addStudent() {
   newStudent.name = '';
   newStudent.parentName = '';
   newStudent.parentPhone = '';
-  notify('Da them hoc vien moi.');
+  notify('Đã thêm học viên mới.');
 }
 
 function collectPayment() {
   const amount = Number(state.paymentAmount || 0);
   if (!activeStudent.value || amount <= 0) {
-    notify('So tien thu chua hop le.');
+    notify('Số tiền thu chưa hợp lệ.');
     return;
   }
 
@@ -257,7 +287,7 @@ function collectPayment() {
     debt.status = debt.remainingAmount === 0 ? 'paid' : 'partial';
   }
 
-  notify('Da ghi nhan thanh toan.');
+  notify('Đã ghi nhận thanh toán.');
 }
 
 function notify(message) {
@@ -269,11 +299,11 @@ function notify(message) {
 
 function login() {
   if (!loginForm.email.trim() || !loginForm.password.trim()) {
-    notify('Vui long nhap email va mat khau.');
+    notify('Vui lòng nhập email và mật khẩu.');
     return;
   }
   state.isAuthenticated = true;
-  notify('Dang nhap thanh cong.');
+  notify('Đăng nhập thành công.');
 }
 
 function logout() {
@@ -281,7 +311,7 @@ function logout() {
   state.activeView = 'dashboard';
 }
 
-const apiHint = computed(() => appScriptUrl ? 'Dang cau hinh Apps Script API' : 'Dang chay che do demo local');
+const apiHint = computed(() => appScriptUrl ? 'Đang cấu hình Apps Script API' : 'Đang chạy chế độ demo local');
 </script>
 
 <template>
@@ -295,20 +325,20 @@ const apiHint = computed(() => appScriptUrl ? 'Dang cau hinh Apps Script API' : 
         </div>
       </div>
       <div>
-        <p class="eyebrow">WebApp quan ly lop hoc</p>
-        <h1>Dang nhap</h1>
+        <p class="eyebrow">WebApp quản lý lớp học</p>
+        <h1>Đăng nhập</h1>
       </div>
       <label>
         Email
         <input v-model="loginForm.email" type="email" autocomplete="email" />
       </label>
       <label>
-        Mat khau
+        Mật khẩu
         <input v-model="loginForm.password" type="password" autocomplete="current-password" @keydown.enter="login" />
       </label>
       <button type="button" class="primary-button full-button" @click="login">
         <Check :size="16" />
-        Vao he thong
+        Vào hệ thống
       </button>
       <small class="login-hint">Demo: admin@tutor.local / 123456</small>
     </div>
@@ -325,7 +355,7 @@ const apiHint = computed(() => appScriptUrl ? 'Dang cau hinh Apps Script API' : 
         </div>
       </div>
 
-      <nav class="nav-list" aria-label="Dieu huong chinh">
+      <nav class="nav-list" aria-label="Điều hướng chính">
         <button
           v-for="item in navItems"
           :key="item.id"
@@ -343,60 +373,60 @@ const apiHint = computed(() => appScriptUrl ? 'Dang cau hinh Apps Script API' : 
     <main class="main-panel">
       <header class="topbar">
         <div>
-          <p class="eyebrow">Quan ly lop hoc</p>
+          <p class="eyebrow">Quản lý lớp học</p>
           <h1>{{ navItems.find(item => item.id === state.activeView)?.label }}</h1>
         </div>
         <div class="user-card">
           <span>{{ state.user.name }}</span>
-          <small>{{ state.user.role }}</small>
-          <button type="button" @click="logout">Thoat</button>
+          <small>{{ roleLabel(state.user.role) }}</small>
+          <button type="button" @click="logout">Thoát</button>
         </div>
       </header>
 
       <section v-if="state.activeView === 'dashboard'" class="view-stack">
         <div class="metric-grid">
           <article class="metric">
-            <span>Lop hom nay</span>
+            <span>Lớp hôm nay</span>
             <strong>{{ dashboard.classesToday }}</strong>
             <small>{{ dashboard.nextSession.startTime }} - {{ className(dashboard.nextSession.classId) }}</small>
           </article>
           <article class="metric">
             <span>Doanh thu</span>
             <strong>{{ formatCurrency(dashboard.revenue) }}</strong>
-            <small>Da ghi nhan trong ky demo</small>
+            <small>Đã ghi nhận trong kỳ demo</small>
           </article>
           <article class="metric danger">
-            <span>Cong no</span>
+            <span>Công nợ</span>
             <strong>{{ formatCurrency(dashboard.debt) }}</strong>
-            <small>{{ state.debts.filter(item => item.remainingAmount > 0).length }} hoc vien can nhac</small>
+            <small>{{ state.debts.filter(item => item.remainingAmount > 0).length }} học viên cần nhắc</small>
           </article>
           <article class="metric">
-            <span>Ty le di hoc</span>
+            <span>Tỷ lệ đi học</span>
             <strong>{{ attendanceSummary }}%</strong>
-            <small>Dua tren lich su diem danh</small>
+            <small>Dựa trên lịch sử điểm danh</small>
           </article>
         </div>
 
         <div class="two-column">
           <section class="panel">
             <div class="panel-title">
-              <h2>Lich day sap toi</h2>
+              <h2>Lịch dạy sắp tới</h2>
               <CalendarDays :size="18" />
             </div>
             <div class="timeline">
               <article v-for="session in state.schedules" :key="session.id" class="timeline-row">
                 <div>
                   <strong>{{ className(session.classId) }}</strong>
-                  <span>{{ session.date }} - {{ session.startTime }} den {{ session.endTime }}</span>
+                  <span>{{ session.date }} - {{ session.startTime }} đến {{ session.endTime }}</span>
                 </div>
-                <small>{{ session.status }}</small>
+                <small>{{ statusLabel(session.status) }}</small>
               </article>
             </div>
           </section>
 
           <section class="panel">
             <div class="panel-title">
-              <h2>Cong no can xu ly</h2>
+              <h2>Công nợ cần xử lý</h2>
               <WalletCards :size="18" />
             </div>
             <div class="debt-list">
@@ -426,7 +456,7 @@ const apiHint = computed(() => appScriptUrl ? 'Dang cau hinh Apps Script API' : 
               <p>{{ item.scheduleText }}</p>
             </div>
             <span>{{ formatCurrency(item.feeAmount) }}</span>
-            <small>{{ item.teacherName }} - {{ state.students.filter(student => student.classIds.includes(item.id)).length }} hoc vien</small>
+            <small>{{ item.teacherName }} - {{ state.students.filter(student => student.classIds.includes(item.id)).length }} học viên</small>
           </article>
         </div>
 
@@ -439,9 +469,9 @@ const apiHint = computed(() => appScriptUrl ? 'Dang cau hinh Apps Script API' : 
             <div v-for="student in classStudents" :key="student.id" class="student-row">
               <div>
                 <strong>{{ student.name }}</strong>
-                <span>Phu huynh: {{ student.parentName }} - {{ student.parentPhone }}</span>
+                <span>Phụ huynh: {{ student.parentName }} - {{ student.parentPhone }}</span>
               </div>
-              <small>{{ student.status }}</small>
+              <small>{{ statusLabel(student.status) }}</small>
             </div>
           </div>
         </section>
@@ -450,7 +480,7 @@ const apiHint = computed(() => appScriptUrl ? 'Dang cau hinh Apps Script API' : 
       <section v-if="state.activeView === 'attendance'" class="view-stack">
         <div class="toolbar">
           <label>
-            Lop diem danh
+            Lớp điểm danh
             <select v-model="state.selectedClassId">
               <option v-for="item in state.classes" :key="item.id" :value="item.id">{{ item.name }}</option>
             </select>
@@ -486,25 +516,25 @@ const apiHint = computed(() => appScriptUrl ? 'Dang cau hinh Apps Script API' : 
         <div class="toolbar">
           <label class="search-field">
             <Search :size="16" />
-            <input v-model="state.studentSearch" type="search" placeholder="Tim hoc vien, phu huynh, so dien thoai" />
+            <input v-model="state.studentSearch" type="search" placeholder="Tìm học viên, phụ huynh, số điện thoại" />
           </label>
         </div>
 
         <section class="panel form-panel">
           <div class="panel-title">
-            <h2>Them hoc vien nhanh</h2>
+            <h2>Thêm học viên nhanh</h2>
             <Plus :size="18" />
           </div>
           <div class="inline-form">
-            <input v-model="newStudent.name" placeholder="Ten hoc vien" />
-            <input v-model="newStudent.parentName" placeholder="Ten phu huynh" />
-            <input v-model="newStudent.parentPhone" placeholder="So dien thoai phu huynh" />
+            <input v-model="newStudent.name" placeholder="Tên học viên" />
+            <input v-model="newStudent.parentName" placeholder="Tên phụ huynh" />
+            <input v-model="newStudent.parentPhone" placeholder="Số điện thoại phụ huynh" />
             <select v-model="newStudent.classId">
               <option v-for="item in state.classes" :key="item.id" :value="item.id">{{ item.name }}</option>
             </select>
             <button type="button" class="primary-button" @click="addStudent">
               <Plus :size="16" />
-              Them
+              Thêm
             </button>
           </div>
         </section>
@@ -516,7 +546,7 @@ const apiHint = computed(() => appScriptUrl ? 'Dang cau hinh Apps Script API' : 
               <p>{{ student.parentName }} - {{ student.parentPhone }}</p>
               <span>{{ student.classIds.map(className).join(', ') }}</span>
             </div>
-            <small>{{ student.status }}</small>
+            <small>{{ statusLabel(student.status) }}</small>
           </article>
         </section>
       </section>
@@ -524,7 +554,7 @@ const apiHint = computed(() => appScriptUrl ? 'Dang cau hinh Apps Script API' : 
       <section v-if="state.activeView === 'payments'" class="view-stack">
         <section class="panel form-panel">
           <div class="panel-title">
-            <h2>Ghi nhan thu hoc phi</h2>
+            <h2>Ghi nhận thu học phí</h2>
             <Check :size="18" />
           </div>
           <div class="inline-form">
@@ -533,13 +563,13 @@ const apiHint = computed(() => appScriptUrl ? 'Dang cau hinh Apps Script API' : 
             </select>
             <input v-model.number="state.paymentAmount" type="number" min="0" step="50000" />
             <select v-model="state.paymentMethod">
-              <option value="cash">Tien mat</option>
-              <option value="bank">Chuyen khoan</option>
-              <option value="other">Khac</option>
+              <option value="cash">Tiền mặt</option>
+              <option value="bank">Chuyển khoản</option>
+              <option value="other">Khác</option>
             </select>
             <button type="button" class="primary-button" @click="collectPayment">
               <WalletCards :size="16" />
-              Thu tien
+              Thu tiền
             </button>
           </div>
         </section>
@@ -547,14 +577,14 @@ const apiHint = computed(() => appScriptUrl ? 'Dang cau hinh Apps Script API' : 
         <div class="two-column">
           <section class="panel">
             <div class="panel-title">
-              <h2>Cong no</h2>
+              <h2>Công nợ</h2>
               <CircleDollarSign :size="18" />
             </div>
             <div class="debt-list">
               <article v-for="debt in state.debts" :key="debt.id" class="debt-row">
                 <div>
                   <strong>{{ studentName(debt.studentId) }}</strong>
-                  <span>{{ className(debt.classId) }} - han {{ debt.dueDate }}</span>
+                  <span>{{ className(debt.classId) }} - hạn {{ debt.dueDate }}</span>
                 </div>
                 <b>{{ formatCurrency(debt.remainingAmount) }}</b>
               </article>
@@ -563,14 +593,14 @@ const apiHint = computed(() => appScriptUrl ? 'Dang cau hinh Apps Script API' : 
 
           <section class="panel">
             <div class="panel-title">
-              <h2>Lich su thu</h2>
+              <h2>Lịch sử thu</h2>
               <WalletCards :size="18" />
             </div>
             <div class="debt-list">
               <article v-for="payment in state.payments" :key="payment.id" class="debt-row">
                 <div>
                   <strong>{{ studentName(payment.studentId) }}</strong>
-                  <span>{{ payment.paidAt }} - {{ payment.method }}</span>
+                  <span>{{ payment.paidAt }} - {{ methodLabel(payment.method) }}</span>
                 </div>
                 <b>{{ formatCurrency(payment.amount) }}</b>
               </article>
@@ -582,26 +612,26 @@ const apiHint = computed(() => appScriptUrl ? 'Dang cau hinh Apps Script API' : 
       <section v-if="state.activeView === 'reports'" class="view-stack">
         <div class="metric-grid compact">
           <article class="metric">
-            <span>Tong doanh thu</span>
+            <span>Tổng doanh thu</span>
             <strong>{{ formatCurrency(dashboard.revenue) }}</strong>
           </article>
           <article class="metric danger">
-            <span>Con phai thu</span>
+            <span>Còn phải thu</span>
             <strong>{{ formatCurrency(dashboard.debt) }}</strong>
           </article>
           <article class="metric">
-            <span>Hoc vien dang hoc</span>
+            <span>Học viên đang học</span>
             <strong>{{ state.students.filter(item => item.status === 'active').length }}</strong>
           </article>
           <article class="metric">
-            <span>Ty le di hoc</span>
+            <span>Tỷ lệ đi học</span>
             <strong>{{ attendanceSummary }}%</strong>
           </article>
         </div>
 
         <section class="panel">
           <div class="panel-title">
-            <h2>Doanh thu theo lop</h2>
+            <h2>Doanh thu theo lớp</h2>
             <CircleDollarSign :size="18" />
           </div>
           <div class="report-bars">
@@ -619,20 +649,20 @@ const apiHint = computed(() => appScriptUrl ? 'Dang cau hinh Apps Script API' : 
       <section v-if="state.activeView === 'settings'" class="view-stack">
         <section class="panel">
           <div class="panel-title">
-            <h2>Ket noi Google Apps Script</h2>
+            <h2>Kết nối Google Apps Script</h2>
             <Settings :size="18" />
           </div>
           <div class="settings-grid">
             <label>
               Apps Script URL
-              <input :value="appScriptUrl || 'Chua cau hinh VITE_APPS_SCRIPT_URL'" readonly />
+              <input :value="appScriptUrl || 'Chưa cấu hình VITE_APPS_SCRIPT_URL'" readonly />
             </label>
             <label>
-              Sheet template
-              <input value="HocVien, LopHoc, LichHoc, DiemDanh, ThuHocPhi, CongNo..." readonly />
+              Mẫu Google Sheet
+              <input value="Học viên, Lớp học, Lịch học, Điểm danh, Thu học phí, Công nợ..." readonly />
             </label>
             <label>
-              Kenh email
+              Kênh email
               <input value="Google Apps Script MailApp" readonly />
             </label>
             <label>
@@ -644,10 +674,10 @@ const apiHint = computed(() => appScriptUrl ? 'Dang cau hinh Apps Script API' : 
 
         <section class="panel">
           <div class="panel-title">
-            <h2>Mau thong bao</h2>
+            <h2>Mẫu thông báo</h2>
             <Mail :size="18" />
           </div>
-          <textarea readonly>Phu huynh than men, hoc phi thang nay cua {student_name} con {remaining_amount}. Han thanh toan: {due_date}.</textarea>
+          <textarea readonly>Phụ huynh thân mến, học phí tháng này của {student_name} còn {remaining_amount}. Hạn thanh toán: {due_date}.</textarea>
         </section>
       </section>
     </main>

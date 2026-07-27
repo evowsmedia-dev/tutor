@@ -30,6 +30,8 @@ File này dùng để ghi lại lịch sử thay đổi trong quá trình xây d
 - Deploy production trên Vercel thành công; alias production là `https://tutor-six-delta.vercel.app`.
 - Kiểm tra `curl -I https://tutor-six-delta.vercel.app` trả `HTTP/2 200`.
 - Redeploy production từ HEAD mới nhất; deployment URL là `https://tutor-iqjtap03a-rubybao.vercel.app`, alias vẫn là `https://tutor-six-delta.vercel.app`.
+- Cập nhật toàn bộ ngôn ngữ hiển thị trên frontend sang tiếng Việt có dấu.
+- Thêm nhãn tiếng Việt cho vai trò, trạng thái lớp/buổi học/học viên/công nợ và phương thức thanh toán.
 
 ### Notes
 
