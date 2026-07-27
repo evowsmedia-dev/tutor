@@ -25,8 +25,9 @@ MVP hiện tập trung vào giao diện vận hành theo file `quanly-lophoc(1).
 6. Kiểm thử local, build production và deploy Vercel.
 7. Bổ sung PWA notification, preference theo từng loại thông báo và API push Vercel.
 8. Bổ sung điểm danh ảnh theo consent, media log và hàng chờ xác nhận khi độ tin cậy thấp.
-9. Bổ sung thẻ chia sẻ phụ huynh PNG/PDF cho đã đến lớp, vắng học, phiếu học phí, xác nhận thu tiền và sổ liên lạc.
+9. Bổ sung thẻ chia sẻ phụ huynh dạng ảnh PNG duy nhất cho đã đến lớp, vắng học, phiếu học phí, xác nhận thu tiền và sổ liên lạc.
 10. Bổ sung các màn theo ảnh tham chiếu: Sổ liên lạc, Phiếu học phí, Thu học phí tự động, Thống kê tab, Bảng giá và Dùng thử.
+11. Dùng `rivex-solutions-favicon.png` làm logo web app, nới padding toàn site và thêm layout grid cards bên cạnh layout list cho lịch/danh sách.
 
 ## Tieu chi nghiem thu MVP
 
@@ -37,7 +38,8 @@ MVP hiện tập trung vào giao diện vận hành theo file `quanly-lophoc(1).
 - Zalo/email có preview, lịch sử gửi và fallback thủ công khi chưa đủ cấu hình.
 - Bật/tắt riêng nhắc lịch dạy, tổng hợp công nợ đầu tháng và cảnh báo nguy cơ nghỉ học.
 - Chụp/tải ảnh trong màn Điểm danh, tự điểm danh học sinh đủ consent và đưa ca cần xác nhận vào hàng chờ.
-- Tạo thẻ PNG/PDF và share/copy/download được cho phụ huynh.
+- Tạo thẻ ảnh PNG duy nhất và share/copy/download được cho phụ huynh.
+- Các danh sách chính có lựa chọn List/Grid, không bị díu rít hoặc overlap trên desktop/mobile.
 - Modal thêm lớp và drawer tạo hóa đơn hoạt động trên desktop/mobile.
 - Giao diện không vỡ trên mobile, tablet, desktop.
 

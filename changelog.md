@@ -4,6 +4,15 @@ File này dùng để ghi lại lịch sử thay đổi trong quá trình xây d
 
 ## 2026-07-27
 
+### Rico Study Logo, Spacing, Image-only Share and Grid Layouts
+
+- Dùng `docs/rivex-solutions-favicon.png` làm logo/fav icon/web app icon, publish asset tại `public/rivex-solutions-favicon.png`.
+- Cập nhật login, sidebar, manifest, favicon và service worker notification icon sang logo mới.
+- Nới padding/gap toàn site: content, topbar, sidebar, card, toolbar, modal, drawer, row list và mobile breakpoint để giảm cảm giác díu rít/overlap.
+- Quy chuẩn tất cả nội dung chia sẻ phụ huynh về một định dạng duy nhất: ảnh PNG bằng canvas; giao diện chỉ còn nút share ảnh.
+- Thêm layout grid cards bên cạnh list cho Lịch dạy, Học sinh, Phiếu học phí và Thẻ chia sẻ gần đây.
+- Cập nhật README và plan theo logo mới, image-only share và layout list/grid.
+
 ### Rico Study Notification, Photo Attendance and Parent Share Expansion
 
 - Điều chỉnh UI sang layout vận hành theo ảnh tham chiếu: sidebar nhóm mục, topbar tìm kiếm/trạng thái/tháng/tài khoản, bottom nav mobile, modal/drawer và bảng giá.
@@ -11,7 +20,7 @@ File này dùng để ghi lại lịch sử thay đổi trong quá trình xây d
 - Thêm modal Thêm lớp mới với màu nhận diện, kiểu học phí, mô tả và lịch học hàng tuần nhiều buổi.
 - Thêm drawer Tạo hóa đơn 6 bước, hỗ trợ một học sinh hoặc tạo hàng loạt, tự điền kỳ thu phí/số tiền và tạo thẻ gửi phụ huynh.
 - Thêm luồng điểm danh ảnh: chụp/tải ảnh, mock nhận diện học sinh có consent, tự đánh dấu Có mặt, đưa hồ sơ thiếu consent vào hàng chờ xác nhận.
-- Thêm thẻ chia sẻ phụ huynh dạng PNG bằng canvas, fallback Web Share/copy/download và xuất PDF qua print dialog.
+- Thêm thẻ chia sẻ phụ huynh dạng PNG bằng canvas, fallback Web Share/copy/download.
 - Thêm PWA manifest, service worker, icon PWA, local notification và Vercel API scaffold cho Web Push.
 - Thêm Cài đặt thông báo theo từng loại: nhắc trước giờ dạy, tổng hợp công nợ đầu tháng, cảnh báo nguy cơ nghỉ học.
 - Mở rộng Apps Script routes/schema cho ảnh điểm danh, push subscription, notification preferences, hóa đơn, chi phí, thẻ share và sổ liên lạc.

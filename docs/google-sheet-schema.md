@@ -206,8 +206,8 @@ Google Sheet cua moi khach hang can co cac tab sau. Cot `id` nen la chuoi duy nh
 | classId | Mã lớp |
 | title | Tiêu đề thẻ |
 | content | Nội dung text |
-| fileUrl | Link ảnh/PDF nếu đã lưu |
-| format | png, pdf |
+| fileUrl | Link ảnh PNG nếu đã lưu |
+| format | png |
 | createdAt | Thời điểm tạo |
 | sharedAt | Thời điểm share/gửi |
 | status | created, shared, failed |

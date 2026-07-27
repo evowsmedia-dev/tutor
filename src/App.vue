@@ -100,6 +100,12 @@ const state = reactive({
   selectedClassId: 'cls_001',
   attendanceDate: todayIso,
   studentSearch: '',
+  layouts: {
+    schedule: 'list',
+    students: 'list',
+    invoices: 'list',
+    notifications: 'list',
+  },
   reportTab: 'attendance',
   pricingMode: 'card',
   modal: null,
@@ -794,28 +800,6 @@ async function copyText(text, showToast = true) {
   }
 }
 
-function exportArtifactPdf(artifact) {
-  const student = studentById(artifact.studentId);
-  const classItem = classById(artifact.classId);
-  const html = `
-    <html lang="vi"><head><title>${artifact.title}</title><style>
-      body{font-family:Arial,sans-serif;margin:0;padding:40px;color:#2a203b}
-      .card{border:1px solid #f0d4df;border-radius:20px;padding:28px}
-      h1{color:#c93470}.muted{color:#776b85}
-    </style></head><body><div class="card">
-      <h1>Rico Study · ${artifact.title}</h1>
-      <h2>${student.name}</h2>
-      <p class="muted">${classItem.name} · ${classItem.time}</p>
-      <p>${artifact.message}</p>
-      <p class="muted">Tạo lúc ${new Date(artifact.createdAt).toLocaleString('vi-VN')}</p>
-    </div></body></html>`;
-  const popup = window.open('', '_blank');
-  popup.document.write(html);
-  popup.document.close();
-  popup.focus();
-  popup.print();
-}
-
 function methodLabel(method) {
   return { cash: 'Tiền mặt', bank: 'Chuyển khoản', other: 'Khác' }[method] || method;
 }
@@ -866,8 +850,8 @@ async function enablePushNotifications() {
   }
   registration.showNotification('Rico Study đã bật thông báo', {
     body: 'Bạn sẽ nhận nhắc trước giờ dạy, học phí và cảnh báo nghỉ nhiều buổi.',
-    icon: '/pwa-192.png',
-    badge: '/pwa-192.png',
+    icon: '/rivex-solutions-favicon.png',
+    badge: '/rivex-solutions-favicon.png',
   });
   toast(state.pushStatus);
 }
@@ -885,7 +869,7 @@ function runDemoReminder() {
     if ('Notification' in window && Notification.permission === 'granted') {
       navigator.serviceWorker.ready.then(registration => registration.showNotification('Sắp đến giờ dạy', {
         body: `${activeClass.value.name} · ${activeClass.value.time}`,
-        icon: '/pwa-192.png',
+        icon: '/rivex-solutions-favicon.png',
       }));
     }
   }
@@ -913,7 +897,7 @@ function toast(message) {
 <template>
   <section v-if="!state.isAuthenticated" class="login-screen">
     <form class="login-card" @submit.prevent="login">
-      <div class="login-mascot"><GraduationCap :size="34" /></div>
+      <img class="login-logo" src="/rivex-solutions-favicon.png" alt="Rico Study" />
       <div class="brandmark">Rico Study<span>.</span></div>
       <p class="login-sub">Quản lý lớp học, điểm danh ảnh, học phí và chia sẻ tình hình học tập với phụ huynh thật gọn.</p>
       <label class="field">
@@ -935,6 +919,7 @@ function toast(message) {
   <div v-else class="app-shell">
     <aside class="sidebar">
       <div class="sidebar-brand">
+        <img class="app-logo" src="/rivex-solutions-favicon.png" alt="Rico Study" />
         <div class="brandmark">Rico Study<span>.</span></div>
       </div>
       <nav class="nav-sections" aria-label="Điều hướng chính">
@@ -1056,7 +1041,14 @@ function toast(message) {
           <h1>Lịch dạy</h1>
           <span>Rico Study dùng lịch này để nhắc trước giờ dạy và xuất sang lịch ngoài.</span>
         </div>
+        <div class="toolbar">
+          <div class="view-toggle" aria-label="Đổi kiểu hiển thị lịch dạy">
+            <button type="button" :class="{ active: state.layouts.schedule === 'list' }" @click="state.layouts.schedule = 'list'">List</button>
+            <button type="button" :class="{ active: state.layouts.schedule === 'grid' }" @click="state.layouts.schedule = 'grid'">Grid</button>
+          </div>
+        </div>
         <section class="panel">
+          <div :class="state.layouts.schedule === 'grid' ? 'card-grid schedule-grid' : 'stack-list'">
           <article v-for="classItem in state.classes" :key="classItem.id" class="schedule-card">
             <div class="class-dot large" :style="{ background: classColor(classItem.colorKey).value }"></div>
             <div>
@@ -1065,6 +1057,7 @@ function toast(message) {
             </div>
             <button type="button" class="btn btn-soft btn-sm" @click="toast('Xuất Google/Apple Calendar đang ở chế độ demo.')"><CalendarDays :size="16" /> Xuất lịch</button>
           </article>
+          </div>
         </section>
       </section>
 
@@ -1076,11 +1069,15 @@ function toast(message) {
         </div>
         <div class="toolbar">
           <label class="local-search"><Search :size="17" /><input v-model="state.studentSearch" name="studentSearch" type="search" placeholder="Tìm học sinh, phụ huynh, số điện thoại..." /></label>
+          <div class="view-toggle" aria-label="Đổi kiểu hiển thị học sinh">
+            <button type="button" :class="{ active: state.layouts.students === 'list' }" @click="state.layouts.students = 'list'">List</button>
+            <button type="button" :class="{ active: state.layouts.students === 'grid' }" @click="state.layouts.students = 'grid'">Grid</button>
+          </div>
           <button type="button" class="btn btn-soft btn-sm" @click="toast('Import Excel/CSV đang ở chế độ demo.')"><FileUp :size="16" /> Import</button>
           <button type="button" class="btn btn-primary btn-sm" @click="toast('Thêm học sinh sẽ nối Google Sheet ở bước backend.')"><Plus :size="16" /> Thêm học sinh</button>
         </div>
-        <div class="list">
-          <article v-for="student in filteredStudents" :key="student.id" class="list-row" @click="openStudentModal(student)">
+        <div :class="state.layouts.students === 'grid' ? 'card-grid student-grid' : 'list'">
+          <article v-for="student in filteredStudents" :key="student.id" :class="state.layouts.students === 'grid' ? 'student-card' : 'list-row'" @click="openStudentModal(student)">
             <div class="avatar">{{ initials(student.name) }}</div>
             <div class="list-main">
               <b>{{ student.name }}</b>
@@ -1168,9 +1165,14 @@ function toast(message) {
         <div class="toolbar">
           <button type="button" class="btn btn-primary btn-sm" @click="openInvoiceDrawer('single')"><Plus :size="16" /> Tạo hóa đơn</button>
           <button type="button" class="btn btn-soft btn-sm" @click="openInvoiceDrawer('bulk')"><Users :size="16" /> Tạo hàng loạt</button>
+          <span class="spacer"></span>
+          <div class="view-toggle" aria-label="Đổi kiểu hiển thị phiếu học phí">
+            <button type="button" :class="{ active: state.layouts.invoices === 'list' }" @click="state.layouts.invoices = 'list'">List</button>
+            <button type="button" :class="{ active: state.layouts.invoices === 'grid' }" @click="state.layouts.invoices = 'grid'">Grid</button>
+          </div>
         </div>
-        <div class="list">
-          <article v-for="invoice in state.invoices" :key="invoice.id" class="list-row no-hover">
+        <div :class="state.layouts.invoices === 'grid' ? 'card-grid invoice-grid' : 'list'">
+          <article v-for="invoice in state.invoices" :key="invoice.id" :class="state.layouts.invoices === 'grid' ? 'invoice-card' : 'list-row no-hover'">
             <div class="metric-icon pink"><ReceiptText :size="18" /></div>
             <div class="list-main">
               <b>{{ studentById(invoice.studentId)?.name }} · {{ invoice.period }}</b>
@@ -1330,12 +1332,17 @@ function toast(message) {
           </section>
           <section class="panel">
             <div class="panel-title"><h2>Thẻ chia sẻ gần đây</h2></div>
-            <article v-for="artifact in state.shareArtifacts.slice(0, 5)" :key="artifact.id" class="list-row no-hover">
-              <div class="metric-icon pink"><Image :size="17" /></div>
-              <div class="list-main"><b>{{ artifact.title }}</b><span>{{ studentById(artifact.studentId)?.name }} · {{ classById(artifact.classId).name }}</span></div>
-              <button type="button" class="btn btn-soft btn-sm" @click="exportArtifactPdf(artifact)">PDF</button>
-              <button type="button" class="btn btn-primary btn-sm" @click="shareArtifact(artifact)"><Share2 :size="16" /> Share</button>
-            </article>
+            <div class="view-toggle compact" aria-label="Đổi kiểu hiển thị thẻ chia sẻ">
+              <button type="button" :class="{ active: state.layouts.notifications === 'list' }" @click="state.layouts.notifications = 'list'">List</button>
+              <button type="button" :class="{ active: state.layouts.notifications === 'grid' }" @click="state.layouts.notifications = 'grid'">Grid</button>
+            </div>
+            <div :class="state.layouts.notifications === 'grid' ? 'card-grid share-grid' : 'list'">
+              <article v-for="artifact in state.shareArtifacts.slice(0, 5)" :key="artifact.id" :class="state.layouts.notifications === 'grid' ? 'share-card' : 'list-row no-hover'">
+                <div class="metric-icon pink"><Image :size="17" /></div>
+                <div class="list-main"><b>{{ artifact.title }}</b><span>{{ studentById(artifact.studentId)?.name }} · {{ classById(artifact.classId).name }} · PNG</span></div>
+                <button type="button" class="btn btn-primary btn-sm" @click="shareArtifact(artifact)"><Share2 :size="16" /> Share ảnh</button>
+              </article>
+            </div>
             <div v-if="!state.shareArtifacts.length" class="empty-state small">Chưa có thẻ chia sẻ nào.</div>
           </section>
         </div>

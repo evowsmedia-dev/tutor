@@ -4,7 +4,7 @@ WebApp quản lý lớp học cho giáo viên dạy thêm và trung tâm nhỏ. 
 
 Rico Study ưu tiên thao tác ít nhất có thể: điểm danh một chạm, tự lưu trạng thái, tự đưa học viên vắng/nghỉ phép vào hàng đợi nhắn phụ huynh, tự điền số tiền còn nợ khi thu học phí và tạo tin Zalo/email từ mẫu có sẵn.
 
-Phiên bản hiện tại bổ sung PWA notification, điểm danh bằng ảnh demo theo consent, thẻ chia sẻ phụ huynh dạng PNG/PDF, Sổ liên lạc, wizard tạo hóa đơn, thu học phí tự động, thống kê chi tiết và bảng giá.
+Phiên bản hiện tại bổ sung PWA notification, điểm danh bằng ảnh demo theo consent, thẻ chia sẻ phụ huynh dạng ảnh PNG, Sổ liên lạc, wizard tạo hóa đơn, thu học phí tự động, thống kê chi tiết và bảng giá.
 
 ## Chạy local
 
@@ -79,11 +79,12 @@ VAPID_SUBJECT=mailto:admin@ricostudy.vn
 
 Nếu thiếu VAPID keys, app vẫn bật được local notification demo và hiển thị fallback rõ ràng.
 
-## Ảnh điểm danh và chia sẻ
+## Ảnh điểm danh và chia sẻ phụ huynh
 
 - Điểm danh ảnh hiện là workflow demo/mock: học sinh có `photoConsentStatus=granted` có thể được tự đánh dấu Có mặt; hồ sơ thiếu consent được đưa vào hàng chờ xác nhận.
-- Thẻ chia sẻ phụ huynh được tạo dạng PNG bằng canvas, dùng Web Share API trên mobile nếu hỗ trợ; fallback là tải ảnh, copy nội dung và mở Zalo thủ công.
-- PDF dùng luồng in trình duyệt để dễ dùng trên mobile/desktop trước khi nối hệ thống lưu file thật.
+- Tất cả nội dung chia sẻ phụ huynh được tạo dưới dạng một ảnh PNG duy nhất bằng canvas, dùng Web Share API trên mobile nếu hỗ trợ; fallback là tải ảnh, copy nội dung và mở Zalo thủ công.
+- Các màn danh sách như học sinh, lịch dạy, phiếu học phí và thẻ chia sẻ có thể đổi giữa layout list và grid cards.
+- Logo web app dùng `docs/rivex-solutions-favicon.png`, được publish qua `public/rivex-solutions-favicon.png`.
 
 ## Trạng thái hiện tại
 
