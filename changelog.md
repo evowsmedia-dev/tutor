@@ -25,6 +25,10 @@ File này dùng để ghi lại lịch sử thay đổi trong quá trình xây d
 - Tạo Sites project production `Tutor Class Manager`.
 - Deploy production version 2 thành công tại `https://tutor-class-manager.rubybao-tre.chatgpt.site`.
 - Kiểm tra production URL trả `HTTP/2 401` do site đang ở chế độ truy cập private/custom.
+- Push source lên GitHub repository `https://github.com/evowsmedia-dev/tutor`.
+- Link local project với Vercel project `rubybao/tutor`.
+- Deploy production trên Vercel thành công; alias production là `https://tutor-six-delta.vercel.app`.
+- Kiểm tra `curl -I https://tutor-six-delta.vercel.app` trả `HTTP/2 200`.
 
 ### Notes
 
