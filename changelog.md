@@ -23,6 +23,8 @@ File này dùng để ghi lại lịch sử thay đổi trong quá trình xây d
 - Khởi động dev server tại `http://localhost:5173/`.
 - Kiểm tra `curl -I http://localhost:5173/` trả `HTTP/1.1 200 OK`.
 - Tạo Sites project production `Tutor Class Manager`.
+- Deploy production version 2 thành công tại `https://tutor-class-manager.rubybao-tre.chatgpt.site`.
+- Kiểm tra production URL trả `HTTP/2 401` do site đang ở chế độ truy cập private/custom.
 
 ### Notes
 
