@@ -14,6 +14,7 @@ File này dùng để ghi lại lịch sử thay đổi trong quá trình xây d
 - Thêm schema Google Sheet tại `docs/google-sheet-schema.md`.
 - Thêm backend Google Apps Script mẫu tại `apps-script/Code.gs`.
 - Thêm `README.md` hướng dẫn chạy local, build production và cấu hình Apps Script.
+- Thêm Sites build adapter để production build có `dist/server/index.js` và `dist/.openai/hosting.json`.
 
 ### Verified
 
@@ -21,6 +22,7 @@ File này dùng để ghi lại lịch sử thay đổi trong quá trình xây d
 - Chạy `npm run build` thành công.
 - Khởi động dev server tại `http://localhost:5173/`.
 - Kiểm tra `curl -I http://localhost:5173/` trả `HTTP/1.1 200 OK`.
+- Tạo Sites project production `Tutor Class Manager`.
 
 ### Notes
 
