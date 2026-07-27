@@ -4,6 +4,27 @@ File này dùng để ghi lại lịch sử thay đổi trong quá trình xây d
 
 ## 2026-07-27
 
+### Rico Study Notification, Photo Attendance and Parent Share Expansion
+
+- Điều chỉnh UI sang layout vận hành theo ảnh tham chiếu: sidebar nhóm mục, topbar tìm kiếm/trạng thái/tháng/tài khoản, bottom nav mobile, modal/drawer và bảng giá.
+- Thêm các màn mới: Lịch dạy, Sổ liên lạc, Phiếu học phí, Thu học phí tự động, Thống kê theo tab, Bảng giá, Hướng dẫn.
+- Thêm modal Thêm lớp mới với màu nhận diện, kiểu học phí, mô tả và lịch học hàng tuần nhiều buổi.
+- Thêm drawer Tạo hóa đơn 6 bước, hỗ trợ một học sinh hoặc tạo hàng loạt, tự điền kỳ thu phí/số tiền và tạo thẻ gửi phụ huynh.
+- Thêm luồng điểm danh ảnh: chụp/tải ảnh, mock nhận diện học sinh có consent, tự đánh dấu Có mặt, đưa hồ sơ thiếu consent vào hàng chờ xác nhận.
+- Thêm thẻ chia sẻ phụ huynh dạng PNG bằng canvas, fallback Web Share/copy/download và xuất PDF qua print dialog.
+- Thêm PWA manifest, service worker, icon PWA, local notification và Vercel API scaffold cho Web Push.
+- Thêm Cài đặt thông báo theo từng loại: nhắc trước giờ dạy, tổng hợp công nợ đầu tháng, cảnh báo nguy cơ nghỉ học.
+- Mở rộng Apps Script routes/schema cho ảnh điểm danh, push subscription, notification preferences, hóa đơn, chi phí, thẻ share và sổ liên lạc.
+- Tối ưu bundle bằng cách chỉ import các icon lucide đang dùng.
+
+### Verified
+
+- Chạy `npm install` thành công, thêm `web-push`, không có vulnerability.
+- Chạy `npm run build` thành công.
+- Kiểm tra dev server tại `http://localhost:5174/` bằng Chrome DevTools MCP.
+- Xác nhận login, dashboard, sidebar nhóm mục, mobile bottom nav, modal Thêm lớp mới và drawer Tạo hóa đơn render đúng.
+- Kiểm tra network chỉ còn favicon đã được xử lý bằng icon PWA.
+
 ### Rico Study Implementation
 
 - Đổi thương hiệu app sang `Rico Study`.

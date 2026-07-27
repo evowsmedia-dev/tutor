@@ -10,6 +10,14 @@ const SHEETS = {
   teachers: 'GiaoVien',
   notifications: 'ThongBao',
   parentReports: 'BaoCaoPhuHuynh',
+  attendanceMedia: 'AttendanceMedia',
+  notificationPreferences: 'NotificationPreferences',
+  pushSubscriptions: 'PushSubscriptions',
+  invoices: 'HoaDon',
+  invoiceItems: 'HoaDonItems',
+  expenses: 'ChiPhi',
+  shareArtifacts: 'ShareArtifacts',
+  parentLedger: 'SoLienLac',
   settings: 'CauHinh',
 };
 
@@ -47,6 +55,17 @@ function handleRequest(event) {
       enqueueNotification,
       processNotificationQueue,
       createParentReport,
+      uploadStudentPhoto,
+      saveAttendanceMedia,
+      recordPhotoAttendance,
+      createInvoiceDraft,
+      createInvoice,
+      getInvoiceHistory: () => listRows(SHEETS.invoices),
+      createShareArtifact,
+      getParentLedger,
+      updateNotificationPreferences,
+      getNotificationPreferences,
+      registerPushSubscription,
       getNotificationHistory: () => listRows(SHEETS.notifications),
     };
 
@@ -135,6 +154,9 @@ function markAttendance(data) {
       studentId: record.studentId,
       status: record.status,
       checkedAt,
+      source: record.source || 'tap',
+      confidence: record.confidence || '',
+      mediaId: record.mediaId || '',
       notifiedAt: '',
       notificationStatus: shouldNotify ? 'queued' : '',
       note: record.note || '',
@@ -350,6 +372,169 @@ function createParentReport(data) {
   };
   upsertRow(SHEETS.parentReports, report);
   return report;
+}
+
+function uploadStudentPhoto(data) {
+  if (!data.studentId) throw new Error('Missing studentId');
+  const students = listRows(SHEETS.students);
+  const student = students.find(item => item.id === data.studentId);
+  if (!student) throw new Error('Không tìm thấy học viên');
+
+  const photoUrl = data.photoUrl || '';
+  upsertRow(SHEETS.students, {
+    ...student,
+    photoUrl,
+    photoConsentStatus: data.photoConsentStatus || student.photoConsentStatus || 'pending',
+    updatedAt: new Date().toISOString(),
+  });
+  return { studentId: data.studentId, photoUrl };
+}
+
+function saveAttendanceMedia(data) {
+  const media = {
+    id: data.id || Utilities.getUuid(),
+    classId: data.classId || '',
+    sessionId: data.sessionId || '',
+    fileName: data.fileName || '',
+    fileUrl: data.fileUrl || '',
+    capturedAt: data.capturedAt || new Date().toISOString(),
+    matchedStudentIds: Array.isArray(data.matchedStudentIds) ? data.matchedStudentIds.join(',') : (data.matchedStudentIds || ''),
+    reviewStudentIds: Array.isArray(data.reviewStudentIds) ? data.reviewStudentIds.join(',') : (data.reviewStudentIds || ''),
+    status: data.status || 'review',
+    resultJson: JSON.stringify(data.result || {}),
+  };
+  upsertRow(SHEETS.attendanceMedia, media);
+  return media;
+}
+
+function recordPhotoAttendance(data) {
+  const media = saveAttendanceMedia(data.media || data);
+  const records = (data.records || []).map(record => ({
+    ...record,
+    id: record.id || Utilities.getUuid(),
+    source: record.source || 'photo',
+    confidence: record.confidence || '',
+    mediaId: media.id,
+  }));
+  const attendance = markAttendance({
+    sessionId: data.sessionId,
+    classId: data.classId,
+    records,
+  });
+  return { media, attendance };
+}
+
+function createInvoiceDraft(data) {
+  const students = listRows(SHEETS.students);
+  const classes = listRows(SHEETS.classes);
+  const student = students.find(item => item.id === data.studentId) || {};
+  const classItem = classes.find(item => item.id === data.classId) || {};
+  return {
+    studentId: student.id || '',
+    classId: classItem.id || '',
+    period: data.period || Utilities.formatDate(new Date(), Session.getScriptTimeZone(), 'MM/yyyy'),
+    amount: Number(data.amount || classItem.feeAmount || student.remainingAmount || 0),
+    discount: Number(data.discount || 0),
+    template: data.template || 'Rico hồng',
+    notifyParent: data.notifyParent !== false,
+  };
+}
+
+function createInvoice(data) {
+  const draft = createInvoiceDraft(data);
+  const invoice = upsertRow(SHEETS.invoices, {
+    id: data.id || Utilities.getUuid(),
+    studentId: draft.studentId,
+    classId: draft.classId,
+    period: draft.period,
+    amount: Math.max(0, draft.amount - draft.discount),
+    discount: draft.discount,
+    template: draft.template,
+    status: data.status || 'unpaid',
+    createdAt: new Date().toISOString(),
+    notificationId: '',
+  });
+
+  upsertRow(SHEETS.invoiceItems, {
+    id: Utilities.getUuid(),
+    invoiceId: invoice.id || data.id || '',
+    name: data.itemName || 'Học phí',
+    amount: Math.max(0, draft.amount - draft.discount),
+    note: data.note || '',
+  });
+
+  if (draft.notifyParent) {
+    sendNotification({
+      type: 'remind_fee',
+      studentIds: [draft.studentId],
+      classId: draft.classId,
+      amount: Math.max(0, draft.amount - draft.discount),
+      channels: data.channels || ['zalo', 'email'],
+    });
+  }
+
+  return invoice;
+}
+
+function createShareArtifact(data) {
+  const artifact = {
+    id: data.id || Utilities.getUuid(),
+    type: data.type || '',
+    studentId: data.studentId || '',
+    classId: data.classId || '',
+    title: data.title || 'Thông báo Rico Study',
+    content: data.content || '',
+    fileUrl: data.fileUrl || '',
+    format: data.format || 'png',
+    createdAt: new Date().toISOString(),
+    sharedAt: data.sharedAt || '',
+    status: data.status || 'created',
+  };
+  upsertRow(SHEETS.shareArtifacts, artifact);
+  return artifact;
+}
+
+function getParentLedger(data) {
+  const rows = listRows(SHEETS.parentLedger).filter(item => {
+    if (data.studentId && item.studentId !== data.studentId) return false;
+    return !data.token || item.token === data.token;
+  });
+  return rows;
+}
+
+function updateNotificationPreferences(data) {
+  const prefs = data.preferences || {};
+  Object.keys(prefs).forEach(key => {
+    upsertRow(SHEETS.notificationPreferences, {
+      id: data.userId + '_' + key,
+      userId: data.userId || '',
+      type: key,
+      enabled: prefs[key] ? 'TRUE' : 'FALSE',
+      reminderMinutes: data.reminderMinutes || '',
+      updatedAt: new Date().toISOString(),
+    });
+  });
+  return getNotificationPreferences({ userId: data.userId });
+}
+
+function getNotificationPreferences(data) {
+  return listRows(SHEETS.notificationPreferences).filter(item => !data.userId || item.userId === data.userId);
+}
+
+function registerPushSubscription(data) {
+  const subscription = {
+    id: data.id || Utilities.getUuid(),
+    userId: data.userId || '',
+    endpoint: data.endpoint || '',
+    p256dh: data.keys && data.keys.p256dh ? data.keys.p256dh : (data.p256dh || ''),
+    auth: data.keys && data.keys.auth ? data.keys.auth : (data.auth || ''),
+    userAgent: data.userAgent || '',
+    active: data.active === false ? 'FALSE' : 'TRUE',
+    preferencesJson: JSON.stringify(data.preferences || {}),
+    updatedAt: new Date().toISOString(),
+  };
+  upsertRow(SHEETS.pushSubscriptions, subscription);
+  return subscription;
 }
 
 function buildNotificationMessage(type, student, classItem, data) {

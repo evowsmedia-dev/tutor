@@ -4,6 +4,8 @@ WebApp quản lý lớp học cho giáo viên dạy thêm và trung tâm nhỏ. 
 
 Rico Study ưu tiên thao tác ít nhất có thể: điểm danh một chạm, tự lưu trạng thái, tự đưa học viên vắng/nghỉ phép vào hàng đợi nhắn phụ huynh, tự điền số tiền còn nợ khi thu học phí và tạo tin Zalo/email từ mẫu có sẵn.
 
+Phiên bản hiện tại bổ sung PWA notification, điểm danh bằng ảnh demo theo consent, thẻ chia sẻ phụ huynh dạng PNG/PDF, Sổ liên lạc, wizard tạo hóa đơn, thu học phí tự động, thống kê chi tiết và bảng giá.
+
 ## Chạy local
 
 ```bash
@@ -58,10 +60,36 @@ Rico Study hỗ trợ 3 mức gửi:
 - ZNS khi có token, template đã duyệt và số điện thoại đủ điều kiện.
 - Fallback thủ công: tạo sẵn nội dung để giáo viên sao chép/mở Zalo gửi.
 
+## Thông báo thiết bị và PWA
+
+App có `manifest.webmanifest` và service worker tại `public/sw.js`. Khi trình duyệt hỗ trợ Web Push và người dùng cấp quyền, Rico Study có thể nhận:
+
+- nhắc trước giờ dạy theo lịch tuần;
+- tổng hợp học sinh chưa đóng học phí đầu tháng;
+- cảnh báo học sinh có nguy cơ nghỉ nhiều buổi.
+
+Để gửi Web Push thật trên Vercel, cấu hình biến môi trường:
+
+```text
+VITE_VAPID_PUBLIC_KEY=<public key dùng ở browser>
+VAPID_PUBLIC_KEY=<public key dùng ở API>
+VAPID_PRIVATE_KEY=<private key dùng ở API>
+VAPID_SUBJECT=mailto:admin@ricostudy.vn
+```
+
+Nếu thiếu VAPID keys, app vẫn bật được local notification demo và hiển thị fallback rõ ràng.
+
+## Ảnh điểm danh và chia sẻ
+
+- Điểm danh ảnh hiện là workflow demo/mock: học sinh có `photoConsentStatus=granted` có thể được tự đánh dấu Có mặt; hồ sơ thiếu consent được đưa vào hàng chờ xác nhận.
+- Thẻ chia sẻ phụ huynh được tạo dạng PNG bằng canvas, dùng Web Share API trên mobile nếu hỗ trợ; fallback là tải ảnh, copy nội dung và mở Zalo thủ công.
+- PDF dùng luồng in trình duyệt để dễ dùng trên mobile/desktop trước khi nối hệ thống lưu file thật.
+
 ## Trạng thái hiện tại
 
-- Đã có MVP frontend Rico Study chạy demo local.
-- Đã có schema Google Sheet và backend Apps Script mẫu.
-- Đã có UI hàng đợi thông báo, mock Zalo/OA/ZNS fallback và báo cáo phụ huynh.
+- Đã có frontend Rico Study chạy demo local với layout vận hành theo ảnh tham chiếu.
+- Đã có schema Google Sheet và backend Apps Script mẫu mở rộng cho thông báo, ảnh điểm danh, hóa đơn, chi phí và share artifact.
+- Đã có UI hàng đợi thông báo, mock Zalo/OA/ZNS fallback, báo cáo phụ huynh, PWA notification và share card.
 - Chưa kết nối API thật vào frontend.
 - Chưa cấu hình token Zalo OA/ZNS production.
+- Chưa cấu hình VAPID keys production cho Web Push thật.
