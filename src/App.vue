@@ -174,6 +174,12 @@ const state = reactive({
     },
   },
   attendanceMedia: [],
+  ledgerNotes: {
+    stu_001: { teacherNote: 'Minh An làm bài đều, cần trình bày lời giải rõ hơn.', lastSession: 'Hoàn thành 8/10 bài phân số, cần luyện bài toán lời văn.', nextGoal: 'Ôn quy đồng mẫu số và làm 3 bài vận dụng.', parentMessage: 'Anh/chị nhắc bé luyện thêm phần trình bày lời giải trong tuần này giúp Rico Study ạ.', behavior: 'Tập trung', homework: 'Đã giao 3 bài về nhà', score: 8.5 },
+    stu_002: { teacherNote: 'Bảo Châu phát âm tốt hơn, cần duy trì ôn từ vựng.', lastSession: 'Luyện hội thoại chủ đề gia đình, phản xạ nhanh hơn.', nextGoal: 'Học 20 từ mới và ghi âm đoạn hội thoại ngắn.', parentMessage: 'Chị cho bé nghe lại file luyện nói 10 phút mỗi ngày giúp Rico Study ạ.', behavior: 'Tích cực', homework: 'Đã giao bài nghe', score: 8 },
+    stu_003: { teacherNote: 'Gia Bảo cần đi học đều hơn để không hụt mạch bài.', lastSession: 'Vắng buổi gần nhất, cần học bù phần điện học cơ bản.', nextGoal: 'Sắp xếp học bù và làm phiếu ôn tập số 2.', parentMessage: 'Anh/chị hỗ trợ bé giữ lịch học đều để tránh mất nền trước kỳ kiểm tra ạ.', behavior: 'Cần theo sát', homework: 'Cần bổ sung', score: 6.5 },
+    stu_004: { teacherNote: 'Thảo My hiểu bài nhưng hay quên bài tập về nhà.', lastSession: 'Luyện viết đoạn văn biểu cảm, bố cục đã rõ hơn.', nextGoal: 'Hoàn thiện đoạn văn 12 câu có mở-thân-kết.', parentMessage: 'Chị nhắc bé gửi bài trước buổi học sau để cô sửa sớm ạ.', behavior: 'Ổn định', homework: 'Chưa đủ', score: 7.2 },
+  },
   payments: [
     { id: 'pay_001', studentId: 'stu_001', classId: 'cls_001', amount: 900000, method: 'bank', paidAt: '2026-07-12', notifyParent: true, notificationId: 'noti_001' },
     { id: 'pay_002', studentId: 'stu_005', classId: 'cls_002', amount: 1800000, method: 'cash', paidAt: '2026-07-15', notifyParent: true, notificationId: 'noti_002' },
@@ -499,6 +505,21 @@ function openReportModal(student) {
   state.modal = { type: 'report', reportId: report.id };
 }
 
+function openLedgerModal(student) {
+  const ledger = ledgerByStudent(student.id);
+  state.modal = {
+    type: 'ledger',
+    studentId: student.id,
+    teacherNote: ledger.teacherNote,
+    lastSession: ledger.lastSession,
+    nextGoal: ledger.nextGoal,
+    parentMessage: ledger.parentMessage,
+    behavior: ledger.behavior,
+    homework: ledger.homework,
+    score: ledger.score,
+  };
+}
+
 function openInvoiceDrawer(mode = 'single', student = null) {
   const selectedStudent = student || state.students.find(item => debtOf(item) > 0) || state.students[0];
   const classItem = studentClasses(selectedStudent.id)[0] || state.classes[0];
@@ -628,6 +649,7 @@ function notificationRecipients() {
 }
 
 function createReportData(student, classItem) {
+  const ledger = ledgerByStudent(student.id);
   const relatedRecords = Object.entries(state.attendance)
     .filter(([key]) => key.startsWith(`${classItem.id}|`))
     .map(([, records]) => records[student.id]?.status)
@@ -641,7 +663,44 @@ function createReportData(student, classItem) {
     note: student.note,
     debt: debtOf(student),
     nextClass: `${classItem.name} · ${classItem.time}`,
+    lastSession: ledger.lastSession,
+    nextGoal: ledger.nextGoal,
+    parentMessage: ledger.parentMessage,
+    behavior: ledger.behavior,
+    homework: ledger.homework,
+    score: ledger.score,
   };
+}
+
+function ledgerByStudent(studentId) {
+  const student = studentById(studentId);
+  const fallback = {
+    teacherNote: student?.note || 'Chưa có ghi chú riêng.',
+    lastSession: 'Chưa cập nhật nhật ký buổi học gần nhất.',
+    nextGoal: 'Chưa đặt mục tiêu buổi tới.',
+    parentMessage: 'Rico Study sẽ cập nhật tình hình học tập sau buổi học.',
+    behavior: 'Chưa đánh giá',
+    homework: 'Chưa cập nhật',
+    score: '',
+  };
+  return state.ledgerNotes[studentId] || fallback;
+}
+
+function saveLedgerModal() {
+  const student = studentById(state.modal.studentId);
+  if (!student) return;
+  state.ledgerNotes[student.id] = {
+    teacherNote: state.modal.teacherNote,
+    lastSession: state.modal.lastSession,
+    nextGoal: state.modal.nextGoal,
+    parentMessage: state.modal.parentMessage,
+    behavior: state.modal.behavior,
+    homework: state.modal.homework,
+    score: state.modal.score,
+  };
+  student.note = state.modal.teacherNote || student.note;
+  closeModal();
+  toast('Đã cập nhật Sổ liên lạc cho học sinh.');
 }
 
 function createParentReport(studentId, classId) {
@@ -649,7 +708,12 @@ function createParentReport(studentId, classId) {
   const classItem = classById(classId);
   const data = createReportData(student, classItem);
   const existing = state.parentReports.find(item => item.studentId === studentId && item.classId === classId);
-  if (existing) return existing;
+  if (existing) {
+    existing.data = data;
+    existing.expiresAt = new Date(Date.now() + 1000 * 60 * 60 * 24 * 14).toISOString().slice(0, 10);
+    createShareArtifact('learning_report', student, classItem, data);
+    return existing;
+  }
   const report = {
     id: `report_${Date.now()}_${studentId}`,
     token: `rico-${studentId}-${Date.now()}`,
@@ -680,12 +744,18 @@ function createShareArtifact(type, student, classItem, extra = {}) {
     studentId: student.id,
     classId: classItem.id,
     createdAt: new Date().toISOString(),
-    message: buildTemplate(type, classItem, student),
+    message: type === 'learning_report' ? buildLedgerMessage(student, classItem) : buildTemplate(type, classItem, student),
     amount: extra.amount || debtOf(student),
     period: extra.period || 'Tháng 07/2026',
   };
   state.shareArtifacts.unshift(artifact);
   return artifact;
+}
+
+function buildLedgerMessage(student, classItem) {
+  const report = createReportData(student, classItem);
+  const ledger = ledgerByStudent(student.id);
+  return `Sổ liên lạc ${student.name}: chuyên cần ${report.attendanceRate}%, buổi vắng ${report.absentCount}, điểm gần nhất ${ledger.score || 'chưa cập nhật'}, thái độ ${ledger.behavior}. Buổi gần nhất: ${ledger.lastSession}. Mục tiêu tới: ${ledger.nextGoal}. Công nợ: ${formatCurrency(debtOf(student))}.`;
 }
 
 async function shareArtifact(artifact) {
@@ -1156,14 +1226,29 @@ function toast(message) {
         </div>
         <div :class="state.layouts.ledger === 'grid' ? 'ledger-grid' : 'ledger-list'">
           <article v-for="student in state.students.slice(0, 6)" :key="student.id" class="ledger-card">
-            <div class="avatar large">{{ initials(student.name) }}</div>
-            <h3>{{ student.name }}</h3>
-            <p>{{ student.note }}</p>
+            <div class="ledger-head">
+              <div class="avatar large">{{ initials(student.name) }}</div>
+              <div>
+                <h3>{{ student.name }}</h3>
+                <p>{{ studentClasses(student.id).map(item => item.name).join(', ') || 'Chưa xếp lớp' }}</p>
+              </div>
+            </div>
+            <div class="ledger-parent">
+              <b>{{ student.parentName }}</b>
+              <span>{{ student.parentPhone }} · {{ student.parentEmail }}</span>
+            </div>
             <div class="ledger-stats">
               <span><b>{{ createReportData(student, studentClasses(student.id)[0] || state.classes[0]).attendanceRate }}%</b> chuyên cần</span>
               <span><b>{{ formatCurrency(debtOf(student)) }}</b> công nợ</span>
+              <span><b>{{ ledgerByStudent(student.id).score || '—' }}</b> điểm gần nhất</span>
+              <span><b>{{ ledgerByStudent(student.id).behavior }}</b> thái độ</span>
             </div>
-            <button type="button" class="btn btn-primary btn-sm" @click="openReportModal(student)"><Share2 :size="16" /> Tạo link / thẻ share</button>
+            <p class="ledger-note">{{ ledgerByStudent(student.id).lastSession }}</p>
+            <p class="ledger-goal">{{ ledgerByStudent(student.id).nextGoal }}</p>
+            <div class="ledger-actions">
+              <button type="button" class="btn btn-soft btn-sm" @click="openLedgerModal(student)">Chi tiết / sửa</button>
+              <button type="button" class="btn btn-primary btn-sm" @click="openReportModal(student)"><Share2 :size="16" /> Tạo ảnh share</button>
+            </div>
           </article>
         </div>
       </section>
@@ -1423,12 +1508,20 @@ function toast(message) {
           <div class="mini-stat"><span>Đã đóng</span><b>{{ formatCurrency(studentById(state.modal.studentId).paid) }}</b></div>
           <div class="mini-stat"><span>Còn nợ</span><b>{{ formatCurrency(debtOf(studentById(state.modal.studentId))) }}</b></div>
         </div>
+        <div class="ledger-detail-grid compact">
+          <div class="mini-stat"><span>Email phụ huynh</span><b>{{ studentById(state.modal.studentId).parentEmail }}</b></div>
+          <div class="mini-stat"><span>Zalo</span><b>{{ studentById(state.modal.studentId).zaloFollowStatus === 'followed' ? 'Đã quan tâm OA' : 'Chưa đủ cấu hình' }}</b></div>
+          <div class="mini-stat"><span>Điểm gần nhất</span><b>{{ ledgerByStudent(state.modal.studentId).score || 'Chưa có' }}</b></div>
+          <div class="mini-stat"><span>Thái độ</span><b>{{ ledgerByStudent(state.modal.studentId).behavior }}</b></div>
+        </div>
         <p class="hint">Consent ảnh: {{ studentById(state.modal.studentId).photoConsentStatus === 'granted' ? 'Đã đồng ý' : 'Chưa đủ điều kiện tự nhận diện' }}</p>
         <div class="tag-row"><span v-for="classItem in studentClasses(state.modal.studentId)" :key="classItem.id" class="tag tag-pink">{{ classItem.name }}</span></div>
         <p>{{ studentById(state.modal.studentId).note }}</p>
+        <p class="ledger-goal">{{ ledgerByStudent(state.modal.studentId).nextGoal }}</p>
         <footer class="modal-foot">
           <button type="button" class="btn btn-soft" @click="closeModal">Đóng</button>
-          <button type="button" class="btn btn-soft" @click="openReportModal(studentById(state.modal.studentId))">Sổ liên lạc</button>
+          <button type="button" class="btn btn-soft" @click="openLedgerModal(studentById(state.modal.studentId))">Sửa sổ liên lạc</button>
+          <button type="button" class="btn btn-soft" @click="openReportModal(studentById(state.modal.studentId))">Tạo ảnh share</button>
           <button type="button" class="btn btn-primary" @click="openPaymentModal(studentById(state.modal.studentId))">Thu học phí</button>
         </footer>
       </template>
@@ -1527,11 +1620,53 @@ function toast(message) {
           <span>Buổi vắng: {{ state.parentReports.find(item => item.id === state.modal.reportId).data.absentCount }}</span>
           <span>Công nợ: {{ formatCurrency(state.parentReports.find(item => item.id === state.modal.reportId).data.debt) }}</span>
           <span>Lịch tiếp theo: {{ state.parentReports.find(item => item.id === state.modal.reportId).data.nextClass }}</span>
+          <span>Điểm gần nhất: {{ state.parentReports.find(item => item.id === state.modal.reportId).data.score || 'Chưa cập nhật' }}</span>
+          <span>Thái độ: {{ state.parentReports.find(item => item.id === state.modal.reportId).data.behavior }}</span>
+          <span>Bài tập: {{ state.parentReports.find(item => item.id === state.modal.reportId).data.homework }}</span>
+          <span>Buổi gần nhất: {{ state.parentReports.find(item => item.id === state.modal.reportId).data.lastSession }}</span>
+          <span>Mục tiêu tới: {{ state.parentReports.find(item => item.id === state.modal.reportId).data.nextGoal }}</span>
+          <span>Lời nhắn: {{ state.parentReports.find(item => item.id === state.modal.reportId).data.parentMessage }}</span>
         </div>
         <footer class="modal-foot">
           <button type="button" class="btn btn-soft" @click="closeModal">Đóng</button>
           <button type="button" class="btn btn-soft" @click="copyText(`https://rico.study/phu-huynh/${state.parentReports.find(item => item.id === state.modal.reportId).token}`)">Sao chép link</button>
           <button type="button" class="btn btn-primary" @click="shareArtifact(state.shareArtifacts[0])">Share thẻ</button>
+        </footer>
+      </template>
+    </section>
+
+    <section v-if="state.modal.type === 'ledger'" class="modal modal-wide">
+      <header class="modal-head">
+        <h3>Sổ liên lạc học sinh</h3>
+        <button type="button" class="icon-btn" @click="closeModal"><X :size="17" /></button>
+      </header>
+      <template v-if="studentById(state.modal.studentId)">
+        <div class="profile-head">
+          <div class="avatar large">{{ initials(studentById(state.modal.studentId).name) }}</div>
+          <div>
+            <h3>{{ studentById(state.modal.studentId).name }}</h3>
+            <p>PH: {{ studentById(state.modal.studentId).parentName }} · {{ studentById(state.modal.studentId).parentPhone }}</p>
+          </div>
+        </div>
+        <div class="ledger-detail-grid">
+          <div class="mini-stat"><span>Lớp đang học</span><b>{{ studentClasses(state.modal.studentId).map(item => item.name).join(', ') || 'Chưa xếp lớp' }}</b></div>
+          <div class="mini-stat"><span>Công nợ</span><b>{{ formatCurrency(debtOf(studentById(state.modal.studentId))) }}</b></div>
+          <div class="mini-stat"><span>Email phụ huynh</span><b>{{ studentById(state.modal.studentId).parentEmail }}</b></div>
+          <div class="mini-stat"><span>Zalo</span><b>{{ studentById(state.modal.studentId).zaloFollowStatus === 'followed' ? 'Đã quan tâm OA' : 'Chưa đủ cấu hình' }}</b></div>
+        </div>
+        <div class="row2">
+          <label class="field"><span>Điểm gần nhất</span><input v-model="state.modal.score" type="number" min="0" max="10" step="0.1" /></label>
+          <label class="field"><span>Thái độ học tập</span><input v-model="state.modal.behavior" placeholder="VD: Tích cực, cần theo sát..." /></label>
+        </div>
+        <label class="field"><span>Bài tập / chuẩn bị</span><input v-model="state.modal.homework" placeholder="Tình trạng bài tập về nhà" /></label>
+        <label class="field"><span>Nhật ký buổi gần nhất</span><textarea v-model="state.modal.lastSession" placeholder="Hôm nay học gì, làm được gì, còn vướng gì..."></textarea></label>
+        <label class="field"><span>Mục tiêu buổi tới</span><textarea v-model="state.modal.nextGoal" placeholder="Phần cần ôn, bài cần làm, mục tiêu điểm số..."></textarea></label>
+        <label class="field"><span>Ghi chú giáo viên</span><textarea v-model="state.modal.teacherNote" placeholder="Ghi chú nội bộ hoặc nhận xét tổng quan"></textarea></label>
+        <label class="field"><span>Lời nhắn phụ huynh</span><textarea v-model="state.modal.parentMessage" placeholder="Nội dung ngắn gọn để phụ huynh theo dõi và hỗ trợ"></textarea></label>
+        <footer class="modal-foot">
+          <button type="button" class="btn btn-soft" @click="closeModal">Đóng</button>
+          <button type="button" class="btn btn-soft" @click="copyText(state.modal.parentMessage)">Copy lời nhắn</button>
+          <button type="button" class="btn btn-primary" @click="saveLedgerModal">Lưu sổ liên lạc</button>
         </footer>
       </template>
     </section>

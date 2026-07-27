@@ -4,6 +4,16 @@ File này dùng để ghi lại lịch sử thay đổi trong quá trình xây d
 
 ## 2026-07-27
 
+### Student Ledger Completion and Smoke Test
+
+- Bổ sung dữ liệu `ledgerNotes` cho từng học sinh: điểm gần nhất, thái độ học tập, bài tập/chuẩn bị, nhật ký buổi gần nhất, mục tiêu buổi tới, ghi chú giáo viên và lời nhắn phụ huynh.
+- Cập nhật màn `Sổ liên lạc` thành card học sinh đầy đủ hơn: lớp đang học, thông tin phụ huynh, chuyên cần, công nợ, điểm, thái độ, nhật ký và mục tiêu.
+- Thêm modal `Sổ liên lạc học sinh` để giáo viên sửa nhanh các thông tin cần gửi phụ huynh.
+- Cập nhật hồ sơ học sinh với email/Zalo phụ huynh, điểm, thái độ, mục tiêu và tách rõ nút `Sửa sổ liên lạc` với `Tạo ảnh share`.
+- Cập nhật báo cáo phụ huynh và thẻ share Sổ liên lạc để luôn lấy dữ liệu mới nhất sau khi sửa.
+- Smoke test bằng Chrome DevTools: đăng nhập, mở hồ sơ học sinh, sửa/lưu Sổ liên lạc, tạo ảnh share, thu học phí, tạo hóa đơn 6 bước, điểm danh vắng một chạm và kiểm tra console không có error/warn.
+- Chạy `npm run build` thành công.
+
 ### Rico Study Logo, Spacing, Image-only Share and Grid Layouts
 
 - Dùng `docs/rivex-solutions-favicon.png` làm logo/fav icon/web app icon, publish asset tại `public/rivex-solutions-favicon.png`.

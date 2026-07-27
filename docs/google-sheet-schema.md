@@ -223,7 +223,13 @@ Google Sheet cua moi khach hang can co cac tab sau. Cot `id` nen la chuoi duy nh
 | scheduleSummary | Lịch học tiếp theo |
 | sessionJournal | Nhật ký buổi học |
 | feeSummary | Công nợ/học phí |
+| latestScore | Điểm gần nhất |
+| behavior | Thái độ học tập |
+| homework | Bài tập/chuẩn bị |
+| nextGoal | Mục tiêu buổi tới |
 | teacherNote | Ghi chú giáo viên |
+| parentMessage | Lời nhắn gửi phụ huynh |
+| updatedAt | Thời điểm cập nhật gần nhất |
 | createdAt | Thời điểm tạo |
 
 ## BaoCaoPhuHuynh

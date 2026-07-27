@@ -876,9 +876,56 @@ kbd {
 
 .ledger-card {
   display: grid;
-  gap: 9px;
-  min-height: 208px;
+  gap: 10px;
+  min-height: 294px;
   padding: 16px;
+}
+
+.ledger-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ledger-head p,
+.ledger-parent span,
+.ledger-note,
+.ledger-goal {
+  margin: 0;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.42;
+}
+
+.ledger-parent {
+  display: grid;
+  gap: 2px;
+  border-radius: 10px;
+  padding: 9px 10px;
+  background: #fcfaf8;
+}
+
+.ledger-note,
+.ledger-goal {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+}
+
+.ledger-note {
+  -webkit-line-clamp: 2;
+}
+
+.ledger-goal {
+  -webkit-line-clamp: 1;
+}
+
+.ledger-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: auto;
 }
 
 .ledger-list {
@@ -887,13 +934,13 @@ kbd {
 }
 
 .ledger-list .ledger-card {
-  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-columns: minmax(220px, 0.8fr) minmax(260px, 1fr) minmax(300px, 1.2fr) auto;
   align-items: center;
   min-height: unset;
 }
 
-.ledger-list .ledger-card p,
-.ledger-list .ledger-card .ledger-stats {
+.ledger-list .ledger-parent,
+.ledger-list .ledger-goal {
   display: none;
 }
 
@@ -913,6 +960,13 @@ kbd {
   background: var(--surface-soft);
   color: var(--muted);
   font-size: 12px;
+}
+
+.ledger-detail-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin: 14px 0;
 }
 
 .ledger-stats b,
@@ -1727,7 +1781,9 @@ kbd {
   .template-grid,
   .color-grid,
   .choice-grid,
-  .invoice-steps {
+  .invoice-steps,
+  .ledger-list .ledger-card,
+  .ledger-detail-grid {
     grid-template-columns: 1fr;
   }
 

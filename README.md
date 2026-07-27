@@ -6,6 +6,8 @@ Rico Study ưu tiên thao tác ít nhất có thể: điểm danh một chạm, 
 
 Phiên bản hiện tại bổ sung PWA notification, điểm danh bằng ảnh demo theo consent, thẻ chia sẻ phụ huynh dạng ảnh PNG, Sổ liên lạc, wizard tạo hóa đơn, thu học phí tự động, thống kê chi tiết và bảng giá.
 
+Sổ liên lạc hiện lưu được các thông tin cần nhắn phụ huynh cho từng học sinh: điểm gần nhất, thái độ học tập, bài tập/chuẩn bị, nhật ký buổi gần nhất, mục tiêu buổi tới, ghi chú giáo viên và lời nhắn phụ huynh. Giáo viên có thể sửa trực tiếp từ hồ sơ học sinh hoặc màn Sổ liên lạc, sau đó tạo ảnh share cho phụ huynh bằng dữ liệu mới nhất.
+
 ## Chạy local
 
 ```bash
@@ -83,6 +85,7 @@ Nếu thiếu VAPID keys, app vẫn bật được local notification demo và h
 
 - Điểm danh ảnh hiện là workflow demo/mock: học sinh có `photoConsentStatus=granted` có thể được tự đánh dấu Có mặt; hồ sơ thiếu consent được đưa vào hàng chờ xác nhận.
 - Tất cả nội dung chia sẻ phụ huynh được tạo dưới dạng một ảnh PNG duy nhất bằng canvas, dùng Web Share API trên mobile nếu hỗ trợ; fallback là tải ảnh, copy nội dung và mở Zalo thủ công.
+- Thẻ share Sổ liên lạc dùng dữ liệu vừa lưu gồm chuyên cần, công nợ, điểm, thái độ, bài tập, buổi gần nhất, mục tiêu và lời nhắn phụ huynh.
 - Các màn danh sách như học sinh, lịch dạy, phiếu học phí và thẻ chia sẻ có thể đổi giữa layout list và grid cards.
 - Logo web app dùng `docs/rivex-solutions-favicon.png`, được publish qua `public/rivex-solutions-favicon.png`.
 

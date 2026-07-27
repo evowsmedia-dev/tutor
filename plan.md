@@ -28,6 +28,7 @@ MVP hiện tập trung vào giao diện vận hành theo file `quanly-lophoc(1).
 9. Bổ sung thẻ chia sẻ phụ huynh dạng ảnh PNG duy nhất cho đã đến lớp, vắng học, phiếu học phí, xác nhận thu tiền và sổ liên lạc.
 10. Bổ sung các màn theo ảnh tham chiếu: Sổ liên lạc, Phiếu học phí, Thu học phí tự động, Thống kê tab, Bảng giá và Dùng thử.
 11. Dùng `rivex-solutions-favicon.png` làm logo web app, nới padding toàn site và thêm layout grid cards bên cạnh layout list cho lịch/danh sách.
+12. Hoàn thiện Sổ liên lạc học sinh: cho phép sửa điểm gần nhất, thái độ, bài tập, nhật ký buổi, mục tiêu buổi tới, ghi chú giáo viên và lời nhắn phụ huynh; dữ liệu này phải đi vào thẻ ảnh share.
 
 ## Tieu chi nghiem thu MVP
 
@@ -39,6 +40,7 @@ MVP hiện tập trung vào giao diện vận hành theo file `quanly-lophoc(1).
 - Bật/tắt riêng nhắc lịch dạy, tổng hợp công nợ đầu tháng và cảnh báo nguy cơ nghỉ học.
 - Chụp/tải ảnh trong màn Điểm danh, tự điểm danh học sinh đủ consent và đưa ca cần xác nhận vào hàng chờ.
 - Tạo thẻ ảnh PNG duy nhất và share/copy/download được cho phụ huynh.
+- Sổ liên lạc sửa được ngay từ hồ sơ học sinh hoặc màn Sổ liên lạc, và thẻ share hiển thị dữ liệu mới nhất sau khi lưu.
 - Các danh sách chính có lựa chọn List/Grid, không bị díu rít hoặc overlap trên desktop/mobile.
 - Modal thêm lớp và drawer tạo hóa đơn hoạt động trên desktop/mobile.
 - Giao diện không vỡ trên mobile, tablet, desktop.
