@@ -13,6 +13,7 @@ File này dùng để ghi lại lịch sử thay đổi trong quá trình xây d
 - Thêm mô phỏng Zalo OA/ZNS/email/fallback thủ công, preview tin nhắn, lịch sử gửi và báo cáo phụ huynh.
 - Cập nhật Apps Script API mẫu cho queue thông báo, gửi Zalo OA, ZNS, email, báo cáo phụ huynh và lịch sử thông báo.
 - Cập nhật Google Sheet schema với thông tin phụ huynh/Zalo, trạng thái gửi, báo cáo phụ huynh và cấu hình template.
+- Deploy production Rico Study thành công; deployment URL là `https://tutor-re63otkjq-rubybao.vercel.app`, alias production là `https://tutor-six-delta.vercel.app`.
 
 ### Added
 
